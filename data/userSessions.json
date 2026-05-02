@@ -1,0 +1,766 @@
+[
+  {
+    "userId": "u6596346",
+    "sessionId": "COMP1100-LEC-01"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "COMP1100-TUT-A"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "COMP1100-LAB-A"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "MATH1013-TUT-C"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "ENGN1211-LEC-01"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "ENGN1211-TUT-B"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "ENGN1211-LAB-B"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "STAT1003-LEC-01"
+  },
+  {
+    "userId": "u6596346",
+    "sessionId": "STAT1003-TUT-A"
+  },
+  {
+    "userId": "u3260257",
+    "sessionId": "COMP1100-LEC-01"
+  },
+  {
+    "userId": "u3260257",
+    "sessionId": "COMP1100-TUT-A"
+  },
+  {
+    "userId": "u3260257",
+    "sessionId": "COMP1100-LAB-A"
+  },
+  {
+    "userId": "u3260257",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u3260257",
+    "sessionId": "MATH1013-TUT-A"
+  },
+  {
+    "userId": "u3260257",
+    "sessionId": "PSYC1003-LEC-01"
+  },
+  {
+    "userId": "u3260257",
+    "sessionId": "PSYC1003-TUT-A"
+  },
+  {
+    "userId": "u3961413",
+    "sessionId": "COMP1110-LEC-01"
+  },
+  {
+    "userId": "u3961413",
+    "sessionId": "COMP1110-TUT-B"
+  },
+  {
+    "userId": "u3961413",
+    "sessionId": "COMP1110-LAB-B"
+  },
+  {
+    "userId": "u3961413",
+    "sessionId": "COMP1710-LEC-01"
+  },
+  {
+    "userId": "u3961413",
+    "sessionId": "COMP1710-TUT-A"
+  },
+  {
+    "userId": "u3961413",
+    "sessionId": "COMP1710-LAB-A"
+  },
+  {
+    "userId": "u3961413",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u3961413",
+    "sessionId": "MATH1014-TUT-B"
+  },
+  {
+    "userId": "u3021945",
+    "sessionId": "COMP1110-LEC-01"
+  },
+  {
+    "userId": "u3021945",
+    "sessionId": "COMP1110-TUT-B"
+  },
+  {
+    "userId": "u3021945",
+    "sessionId": "COMP1110-LAB-A"
+  },
+  {
+    "userId": "u3021945",
+    "sessionId": "COMP2400-LEC-01"
+  },
+  {
+    "userId": "u3021945",
+    "sessionId": "COMP2400-TUT-A"
+  },
+  {
+    "userId": "u3021945",
+    "sessionId": "COMP2400-LAB-A"
+  },
+  {
+    "userId": "u3021945",
+    "sessionId": "STAT1008-LEC-01"
+  },
+  {
+    "userId": "u3021945",
+    "sessionId": "STAT1008-TUT-B"
+  },
+  {
+    "userId": "u5490764",
+    "sessionId": "COMP2400-LEC-01"
+  },
+  {
+    "userId": "u5490764",
+    "sessionId": "COMP2400-TUT-B"
+  },
+  {
+    "userId": "u5490764",
+    "sessionId": "COMP2400-LAB-A"
+  },
+  {
+    "userId": "u5490764",
+    "sessionId": "COMP2610-LEC-01"
+  },
+  {
+    "userId": "u5490764",
+    "sessionId": "COMP2610-TUT-B"
+  },
+  {
+    "userId": "u5490764",
+    "sessionId": "COMP2610-LAB-A"
+  },
+  {
+    "userId": "u5490764",
+    "sessionId": "STAT1008-LEC-01"
+  },
+  {
+    "userId": "u5490764",
+    "sessionId": "STAT1008-TUT-B"
+  },
+  {
+    "userId": "u9278439",
+    "sessionId": "COMP1100-LEC-01"
+  },
+  {
+    "userId": "u9278439",
+    "sessionId": "COMP1100-TUT-A"
+  },
+  {
+    "userId": "u9278439",
+    "sessionId": "COMP1100-LAB-B"
+  },
+  {
+    "userId": "u9278439",
+    "sessionId": "COMP1710-LEC-01"
+  },
+  {
+    "userId": "u9278439",
+    "sessionId": "COMP1710-TUT-B"
+  },
+  {
+    "userId": "u9278439",
+    "sessionId": "COMP1710-LAB-A"
+  },
+  {
+    "userId": "u9278439",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u9278439",
+    "sessionId": "MATH1013-TUT-C"
+  },
+  {
+    "userId": "u3371766",
+    "sessionId": "ENGN1211-LEC-01"
+  },
+  {
+    "userId": "u3371766",
+    "sessionId": "ENGN1211-TUT-A"
+  },
+  {
+    "userId": "u3371766",
+    "sessionId": "ENGN1211-LAB-A"
+  },
+  {
+    "userId": "u3371766",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u3371766",
+    "sessionId": "MATH1013-TUT-C"
+  },
+  {
+    "userId": "u3371766",
+    "sessionId": "STAT1003-LEC-01"
+  },
+  {
+    "userId": "u3371766",
+    "sessionId": "STAT1003-TUT-A"
+  },
+  {
+    "userId": "u1909564",
+    "sessionId": "ENGN1211-LEC-01"
+  },
+  {
+    "userId": "u1909564",
+    "sessionId": "ENGN1211-TUT-A"
+  },
+  {
+    "userId": "u1909564",
+    "sessionId": "ENGN1211-LAB-A"
+  },
+  {
+    "userId": "u1909564",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u1909564",
+    "sessionId": "MATH1014-TUT-A"
+  },
+  {
+    "userId": "u1909564",
+    "sessionId": "PSYC1003-LEC-01"
+  },
+  {
+    "userId": "u1909564",
+    "sessionId": "PSYC1003-TUT-B"
+  },
+  {
+    "userId": "u2553065",
+    "sessionId": "COMP1110-LEC-01"
+  },
+  {
+    "userId": "u2553065",
+    "sessionId": "COMP1110-TUT-B"
+  },
+  {
+    "userId": "u2553065",
+    "sessionId": "COMP1110-LAB-A"
+  },
+  {
+    "userId": "u2553065",
+    "sessionId": "ENGN1211-LEC-01"
+  },
+  {
+    "userId": "u2553065",
+    "sessionId": "ENGN1211-TUT-A"
+  },
+  {
+    "userId": "u2553065",
+    "sessionId": "ENGN1211-LAB-B"
+  },
+  {
+    "userId": "u2553065",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u2553065",
+    "sessionId": "MATH1014-TUT-B"
+  },
+  {
+    "userId": "u5316385",
+    "sessionId": "PSYC1003-LEC-01"
+  },
+  {
+    "userId": "u5316385",
+    "sessionId": "PSYC1003-TUT-A"
+  },
+  {
+    "userId": "u5316385",
+    "sessionId": "ECON1101-LEC-01"
+  },
+  {
+    "userId": "u5316385",
+    "sessionId": "ECON1101-TUT-A"
+  },
+  {
+    "userId": "u5316385",
+    "sessionId": "STAT1003-LEC-01"
+  },
+  {
+    "userId": "u5316385",
+    "sessionId": "STAT1003-TUT-B"
+  },
+  {
+    "userId": "u5599538",
+    "sessionId": "ECON1101-LEC-01"
+  },
+  {
+    "userId": "u5599538",
+    "sessionId": "ECON1101-TUT-B"
+  },
+  {
+    "userId": "u5599538",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u5599538",
+    "sessionId": "MATH1013-TUT-B"
+  },
+  {
+    "userId": "u5599538",
+    "sessionId": "STAT1003-LEC-01"
+  },
+  {
+    "userId": "u5599538",
+    "sessionId": "STAT1003-TUT-A"
+  },
+  {
+    "userId": "u4508371",
+    "sessionId": "COMP2610-LEC-01"
+  },
+  {
+    "userId": "u4508371",
+    "sessionId": "COMP2610-TUT-B"
+  },
+  {
+    "userId": "u4508371",
+    "sessionId": "COMP2610-LAB-A"
+  },
+  {
+    "userId": "u4508371",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u4508371",
+    "sessionId": "MATH1014-TUT-A"
+  },
+  {
+    "userId": "u4508371",
+    "sessionId": "STAT1008-LEC-01"
+  },
+  {
+    "userId": "u4508371",
+    "sessionId": "STAT1008-TUT-A"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "COMP1100-LEC-01"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "COMP1100-TUT-B"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "COMP1100-LAB-B"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "COMP1110-LEC-01"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "COMP1110-TUT-B"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "COMP1110-LAB-B"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "MATH1013-TUT-C"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u8626523",
+    "sessionId": "MATH1014-TUT-B"
+  },
+  {
+    "userId": "u5953310",
+    "sessionId": "COMP1710-LEC-01"
+  },
+  {
+    "userId": "u5953310",
+    "sessionId": "COMP1710-TUT-A"
+  },
+  {
+    "userId": "u5953310",
+    "sessionId": "COMP1710-LAB-A"
+  },
+  {
+    "userId": "u5953310",
+    "sessionId": "PSYC1003-LEC-01"
+  },
+  {
+    "userId": "u5953310",
+    "sessionId": "PSYC1003-TUT-B"
+  },
+  {
+    "userId": "u5953310",
+    "sessionId": "ECON1101-LEC-01"
+  },
+  {
+    "userId": "u5953310",
+    "sessionId": "ECON1101-TUT-A"
+  },
+  {
+    "userId": "u8667024",
+    "sessionId": "COMP2400-LEC-01"
+  },
+  {
+    "userId": "u8667024",
+    "sessionId": "COMP2400-TUT-B"
+  },
+  {
+    "userId": "u8667024",
+    "sessionId": "COMP2400-LAB-A"
+  },
+  {
+    "userId": "u8667024",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u8667024",
+    "sessionId": "MATH1014-TUT-B"
+  },
+  {
+    "userId": "u8667024",
+    "sessionId": "ECON1101-LEC-01"
+  },
+  {
+    "userId": "u8667024",
+    "sessionId": "ECON1101-TUT-A"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "COMP1100-LEC-01"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "COMP1100-TUT-A"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "COMP1100-LAB-A"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "MATH1013-TUT-B"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "ENGN1211-LEC-01"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "ENGN1211-TUT-B"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "ENGN1211-LAB-A"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "STAT1003-LEC-01"
+  },
+  {
+    "userId": "u6468745",
+    "sessionId": "STAT1003-TUT-B"
+  },
+  {
+    "userId": "u2048231",
+    "sessionId": "COMP1100-LEC-01"
+  },
+  {
+    "userId": "u2048231",
+    "sessionId": "COMP1100-TUT-B"
+  },
+  {
+    "userId": "u2048231",
+    "sessionId": "COMP1100-LAB-B"
+  },
+  {
+    "userId": "u2048231",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u2048231",
+    "sessionId": "MATH1013-TUT-C"
+  },
+  {
+    "userId": "u2048231",
+    "sessionId": "PSYC1003-LEC-01"
+  },
+  {
+    "userId": "u2048231",
+    "sessionId": "PSYC1003-TUT-A"
+  },
+  {
+    "userId": "u7787507",
+    "sessionId": "COMP1110-LEC-01"
+  },
+  {
+    "userId": "u7787507",
+    "sessionId": "COMP1110-TUT-B"
+  },
+  {
+    "userId": "u7787507",
+    "sessionId": "COMP1110-LAB-B"
+  },
+  {
+    "userId": "u7787507",
+    "sessionId": "COMP1710-LEC-01"
+  },
+  {
+    "userId": "u7787507",
+    "sessionId": "COMP1710-TUT-A"
+  },
+  {
+    "userId": "u7787507",
+    "sessionId": "COMP1710-LAB-A"
+  },
+  {
+    "userId": "u7787507",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u7787507",
+    "sessionId": "MATH1014-TUT-B"
+  },
+  {
+    "userId": "u9566066",
+    "sessionId": "COMP1110-LEC-01"
+  },
+  {
+    "userId": "u9566066",
+    "sessionId": "COMP1110-TUT-B"
+  },
+  {
+    "userId": "u9566066",
+    "sessionId": "COMP1110-LAB-A"
+  },
+  {
+    "userId": "u9566066",
+    "sessionId": "COMP2400-LEC-01"
+  },
+  {
+    "userId": "u9566066",
+    "sessionId": "COMP2400-TUT-A"
+  },
+  {
+    "userId": "u9566066",
+    "sessionId": "COMP2400-LAB-A"
+  },
+  {
+    "userId": "u9566066",
+    "sessionId": "STAT1008-LEC-01"
+  },
+  {
+    "userId": "u9566066",
+    "sessionId": "STAT1008-TUT-A"
+  },
+  {
+    "userId": "u4782281",
+    "sessionId": "COMP2400-LEC-01"
+  },
+  {
+    "userId": "u4782281",
+    "sessionId": "COMP2400-TUT-A"
+  },
+  {
+    "userId": "u4782281",
+    "sessionId": "COMP2400-LAB-A"
+  },
+  {
+    "userId": "u4782281",
+    "sessionId": "COMP2610-LEC-01"
+  },
+  {
+    "userId": "u4782281",
+    "sessionId": "COMP2610-TUT-A"
+  },
+  {
+    "userId": "u4782281",
+    "sessionId": "COMP2610-LAB-A"
+  },
+  {
+    "userId": "u4782281",
+    "sessionId": "STAT1008-LEC-01"
+  },
+  {
+    "userId": "u4782281",
+    "sessionId": "STAT1008-TUT-B"
+  },
+  {
+    "userId": "u9794888",
+    "sessionId": "COMP1100-LEC-01"
+  },
+  {
+    "userId": "u9794888",
+    "sessionId": "COMP1100-TUT-A"
+  },
+  {
+    "userId": "u9794888",
+    "sessionId": "COMP1100-LAB-A"
+  },
+  {
+    "userId": "u9794888",
+    "sessionId": "COMP1710-LEC-01"
+  },
+  {
+    "userId": "u9794888",
+    "sessionId": "COMP1710-TUT-B"
+  },
+  {
+    "userId": "u9794888",
+    "sessionId": "COMP1710-LAB-A"
+  },
+  {
+    "userId": "u9794888",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u9794888",
+    "sessionId": "MATH1013-TUT-B"
+  },
+  {
+    "userId": "u4048462",
+    "sessionId": "ENGN1211-LEC-01"
+  },
+  {
+    "userId": "u4048462",
+    "sessionId": "ENGN1211-TUT-A"
+  },
+  {
+    "userId": "u4048462",
+    "sessionId": "ENGN1211-LAB-B"
+  },
+  {
+    "userId": "u4048462",
+    "sessionId": "MATH1013-LEC-01"
+  },
+  {
+    "userId": "u4048462",
+    "sessionId": "MATH1013-TUT-B"
+  },
+  {
+    "userId": "u4048462",
+    "sessionId": "STAT1003-LEC-01"
+  },
+  {
+    "userId": "u4048462",
+    "sessionId": "STAT1003-TUT-B"
+  },
+  {
+    "userId": "u7332457",
+    "sessionId": "ENGN1211-LEC-01"
+  },
+  {
+    "userId": "u7332457",
+    "sessionId": "ENGN1211-TUT-A"
+  },
+  {
+    "userId": "u7332457",
+    "sessionId": "ENGN1211-LAB-A"
+  },
+  {
+    "userId": "u7332457",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u7332457",
+    "sessionId": "MATH1014-TUT-B"
+  },
+  {
+    "userId": "u7332457",
+    "sessionId": "PSYC1003-LEC-01"
+  },
+  {
+    "userId": "u7332457",
+    "sessionId": "PSYC1003-TUT-B"
+  },
+  {
+    "userId": "u4434042",
+    "sessionId": "COMP1110-LEC-01"
+  },
+  {
+    "userId": "u4434042",
+    "sessionId": "COMP1110-TUT-B"
+  },
+  {
+    "userId": "u4434042",
+    "sessionId": "COMP1110-LAB-A"
+  },
+  {
+    "userId": "u4434042",
+    "sessionId": "ENGN1211-LEC-01"
+  },
+  {
+    "userId": "u4434042",
+    "sessionId": "ENGN1211-TUT-A"
+  },
+  {
+    "userId": "u4434042",
+    "sessionId": "ENGN1211-LAB-B"
+  },
+  {
+    "userId": "u4434042",
+    "sessionId": "MATH1014-LEC-01"
+  },
+  {
+    "userId": "u4434042",
+    "sessionId": "MATH1014-TUT-B"
+  },
+  {
+    "userId": "u8318987",
+    "sessionId": "PSYC1003-LEC-01"
+  },
+  {
+    "userId": "u8318987",
+    "sessionId": "PSYC1003-TUT-A"
+  },
+  {
+    "userId": "u8318987",
+    "sessionId": "ECON1101-LEC-01"
+  },
+  {
+    "userId": "u8318987",
+    "sessionId": "ECON1101-TUT-A"
+  },
+  {
+    "userId": "u8318987",
+    "sessionId": "STAT1003-LEC-01"
+  },
+  {
+    "userId": "u8318987",
+    "sessionId": "STAT1003-TUT-A"
+  }
+]

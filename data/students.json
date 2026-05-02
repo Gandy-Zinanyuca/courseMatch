@@ -1,0 +1,331 @@
+[
+  {
+    "id": "u6596346",
+    "name": "Yuki Hassan",
+    "degree": "Bachelor of Advanced Computing (Hons)",
+    "year": 2,
+    "ageRange": "18-19",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "socialising",
+      "gym"
+    ],
+    "studyStyle": "alone"
+  },
+  {
+    "id": "u3260257",
+    "name": "Fatima Lee",
+    "degree": "Bachelor of Engineering (Hons)",
+    "year": 1,
+    "ageRange": "18-19",
+    "gender": "female",
+    "freeTimeInterests": [
+      "gym"
+    ],
+    "studyStyle": "alone"
+  },
+  {
+    "id": "u3961413",
+    "name": "Lily Khan",
+    "degree": "Bachelor of Computing",
+    "year": 2,
+    "ageRange": "20-22",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "sport",
+      "gaming",
+      "art"
+    ],
+    "studyStyle": "no-preference"
+  },
+  {
+    "id": "u3021945",
+    "name": "Hugo Liu",
+    "degree": "Bachelor of Advanced Computing (Hons)",
+    "year": 1,
+    "ageRange": "23+",
+    "gender": "male",
+    "freeTimeInterests": [
+      "gym",
+      "art"
+    ],
+    "studyStyle": "large"
+  },
+  {
+    "id": "u5490764",
+    "name": "Raj Taylor",
+    "degree": "Bachelor of Psychological Science",
+    "year": 2,
+    "ageRange": "20-22",
+    "gender": "male",
+    "freeTimeInterests": [
+      "socialising",
+      "gaming",
+      "gym"
+    ],
+    "studyStyle": "large"
+  },
+  {
+    "id": "u9278439",
+    "name": "Ava Chen",
+    "degree": "Bachelor of Advanced Computing (Hons)",
+    "year": 2,
+    "ageRange": "18-19",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "gym"
+    ],
+    "studyStyle": "small"
+  },
+  {
+    "id": "u3371766",
+    "name": "Maya Taylor",
+    "degree": "Bachelor of Actuarial Studies",
+    "year": 2,
+    "ageRange": "23+",
+    "gender": "female",
+    "freeTimeInterests": [
+      "music",
+      "socialising"
+    ],
+    "studyStyle": "alone"
+  },
+  {
+    "id": "u1909564",
+    "name": "Noah Costa",
+    "degree": "Bachelor of Software Engineering",
+    "year": 1,
+    "ageRange": "18-19",
+    "gender": "female",
+    "freeTimeInterests": [
+      "music",
+      "art",
+      "gym"
+    ],
+    "studyStyle": "no-preference"
+  },
+  {
+    "id": "u2553065",
+    "name": "Mei O'Brien",
+    "degree": "Bachelor of Actuarial Studies",
+    "year": 1,
+    "ageRange": "18-19",
+    "gender": "non-binary",
+    "freeTimeInterests": [
+      "gym"
+    ],
+    "studyStyle": "no-preference"
+  },
+  {
+    "id": "u5316385",
+    "name": "Sara Walker",
+    "degree": "Bachelor of Engineering (Hons)",
+    "year": 1,
+    "ageRange": "20-22",
+    "gender": "male",
+    "freeTimeInterests": [
+      "sport",
+      "socialising"
+    ],
+    "studyStyle": "no-preference"
+  },
+  {
+    "id": "u5599538",
+    "name": "Ava Patel",
+    "degree": "Bachelor of Computing",
+    "year": 3,
+    "ageRange": "20-22",
+    "gender": "female",
+    "freeTimeInterests": [
+      "sport"
+    ],
+    "studyStyle": "large"
+  },
+  {
+    "id": "u4508371",
+    "name": "Fatima Kumar",
+    "degree": "Bachelor of Economics",
+    "year": 1,
+    "ageRange": "20-22",
+    "gender": "male",
+    "freeTimeInterests": [
+      "art",
+      "socialising",
+      "gaming"
+    ],
+    "studyStyle": "alone"
+  },
+  {
+    "id": "u8626523",
+    "name": "Priya Nguyen",
+    "degree": "Bachelor of Engineering (Hons)",
+    "year": 1,
+    "ageRange": "18-19",
+    "gender": "female",
+    "freeTimeInterests": [
+      "art",
+      "music"
+    ],
+    "studyStyle": "no-preference"
+  },
+  {
+    "id": "u5953310",
+    "name": "Isla Chen",
+    "degree": "Bachelor of Advanced Computing (Hons)",
+    "year": 1,
+    "ageRange": "18-19",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "art",
+      "sport",
+      "socialising"
+    ],
+    "studyStyle": "small"
+  },
+  {
+    "id": "u8667024",
+    "name": "Chloe Kim",
+    "degree": "Bachelor of Software Engineering",
+    "year": 2,
+    "ageRange": "18-19",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "art",
+      "socialising",
+      "gym"
+    ],
+    "studyStyle": "alone"
+  },
+  {
+    "id": "u6468745",
+    "name": "Jack Chen",
+    "degree": "Bachelor of Advanced Computing (Hons)",
+    "year": 2,
+    "ageRange": "20-22",
+    "gender": "non-binary",
+    "freeTimeInterests": [
+      "socialising",
+      "gym",
+      "sport"
+    ],
+    "studyStyle": "small"
+  },
+  {
+    "id": "u2048231",
+    "name": "Marcus Chen",
+    "degree": "Bachelor of Software Engineering",
+    "year": 1,
+    "ageRange": "18-19",
+    "gender": "male",
+    "freeTimeInterests": [
+      "socialising",
+      "gym"
+    ],
+    "studyStyle": "large"
+  },
+  {
+    "id": "u7787507",
+    "name": "Zara Lee",
+    "degree": "Bachelor of Actuarial Studies",
+    "year": 2,
+    "ageRange": "23+",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "music",
+      "art",
+      "gaming"
+    ],
+    "studyStyle": "no-preference"
+  },
+  {
+    "id": "u9566066",
+    "name": "Jordan O'Brien",
+    "degree": "Bachelor of Advanced Computing (Hons)",
+    "year": 3,
+    "ageRange": "18-19",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "sport",
+      "gym"
+    ],
+    "studyStyle": "alone"
+  },
+  {
+    "id": "u4782281",
+    "name": "Ava Taylor",
+    "degree": "Bachelor of Advanced Computing (Hons)",
+    "year": 3,
+    "ageRange": "23+",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "gaming",
+      "art",
+      "music"
+    ],
+    "studyStyle": "small"
+  },
+  {
+    "id": "u9794888",
+    "name": "Emma Murphy",
+    "degree": "Bachelor of Actuarial Studies",
+    "year": 3,
+    "ageRange": "18-19",
+    "gender": "female",
+    "freeTimeInterests": [
+      "music",
+      "socialising",
+      "sport"
+    ],
+    "studyStyle": "alone"
+  },
+  {
+    "id": "u4048462",
+    "name": "Aarav Park",
+    "degree": "Bachelor of Psychological Science",
+    "year": 2,
+    "ageRange": "20-22",
+    "gender": "prefer not to say",
+    "freeTimeInterests": [
+      "gaming",
+      "socialising"
+    ],
+    "studyStyle": "no-preference"
+  },
+  {
+    "id": "u7332457",
+    "name": "Priya Hughes",
+    "degree": "Bachelor of Economics",
+    "year": 1,
+    "ageRange": "20-22",
+    "gender": "male",
+    "freeTimeInterests": [
+      "music",
+      "socialising"
+    ],
+    "studyStyle": "large"
+  },
+  {
+    "id": "u4434042",
+    "name": "Hana Tanaka",
+    "degree": "Bachelor of Engineering (Hons)",
+    "year": 1,
+    "ageRange": "18-19",
+    "gender": "male",
+    "freeTimeInterests": [
+      "gym"
+    ],
+    "studyStyle": "alone"
+  },
+  {
+    "id": "u8318987",
+    "name": "Sara Ahmed",
+    "degree": "Bachelor of Computing",
+    "year": 2,
+    "ageRange": "18-19",
+    "gender": "non-binary",
+    "freeTimeInterests": [
+      "gym"
+    ],
+    "studyStyle": "no-preference"
+  }
+]

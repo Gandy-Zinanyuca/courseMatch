@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: #F5F1E8;
+  color: #0E2240;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* dnd-kit drag overlay must sit above the timetable */
+.dnd-overlay { z-index: 9999; }
+
+/* utility for soft cards */
+.card {
+  @apply bg-white rounded-2xl shadow-sm border border-anu-navy/10;
+}

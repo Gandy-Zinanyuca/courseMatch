@@ -1,0 +1,14 @@
+[
+  { "code": "COMP1100", "name": "Programming as Problem Solving" },
+  { "code": "COMP1110", "name": "Structured Programming" },
+  { "code": "COMP1710", "name": "Web Development & Design" },
+  { "code": "COMP2400", "name": "Relational Databases" },
+  { "code": "COMP2610", "name": "Information Theory" },
+  { "code": "ENGN1211", "name": "Engineering Design 1: Discovering Engineering" },
+  { "code": "MATH1013", "name": "Mathematics and Applications 1" },
+  { "code": "MATH1014", "name": "Mathematics and Applications 2" },
+  { "code": "STAT1003", "name": "Statistical Techniques" },
+  { "code": "STAT1008", "name": "Quantitative Research Methods" },
+  { "code": "PSYC1003", "name": "Psychology 1" },
+  { "code": "ECON1101", "name": "Microeconomics 1" }
+]

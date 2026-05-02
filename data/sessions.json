@@ -1,0 +1,425 @@
+[
+  {
+    "id": "COMP1100-LEC-01",
+    "courseId": "COMP1100",
+    "type": "lecture",
+    "day": "Mon",
+    "startMin": 540,
+    "endMin": 600,
+    "location": "Manning Clark Theatre"
+  },
+  {
+    "id": "COMP1100-TUT-A",
+    "courseId": "COMP1100",
+    "type": "tutorial",
+    "day": "Tue",
+    "startMin": 840,
+    "endMin": 900,
+    "location": "CSIT N-302"
+  },
+  {
+    "id": "COMP1100-TUT-B",
+    "courseId": "COMP1100",
+    "type": "tutorial",
+    "day": "Wed",
+    "startMin": 840,
+    "endMin": 900,
+    "location": "CSIT N-302"
+  },
+  {
+    "id": "COMP1100-TUT-C",
+    "courseId": "COMP1100",
+    "type": "tutorial",
+    "day": "Thu",
+    "startMin": 600,
+    "endMin": 660,
+    "location": "CSIT N-302"
+  },
+  {
+    "id": "COMP1100-LAB-A",
+    "courseId": "COMP1100",
+    "type": "lab",
+    "day": "Fri",
+    "startMin": 840,
+    "endMin": 960,
+    "location": "CSIT N-110"
+  },
+  {
+    "id": "COMP1100-LAB-B",
+    "courseId": "COMP1100",
+    "type": "lab",
+    "day": "Tue",
+    "startMin": 960,
+    "endMin": 1080,
+    "location": "CSIT N-110"
+  },
+  {
+    "id": "COMP1110-LEC-01",
+    "courseId": "COMP1110",
+    "type": "lecture",
+    "day": "Tue",
+    "startMin": 540,
+    "endMin": 600,
+    "location": "Manning Clark Theatre"
+  },
+  {
+    "id": "COMP1110-TUT-A",
+    "courseId": "COMP1110",
+    "type": "tutorial",
+    "day": "Mon",
+    "startMin": 840,
+    "endMin": 900,
+    "location": "CSIT N-203"
+  },
+  {
+    "id": "COMP1110-TUT-B",
+    "courseId": "COMP1110",
+    "type": "tutorial",
+    "day": "Wed",
+    "startMin": 960,
+    "endMin": 1020,
+    "location": "CSIT N-203"
+  },
+  {
+    "id": "COMP1110-LAB-A",
+    "courseId": "COMP1110",
+    "type": "lab",
+    "day": "Thu",
+    "startMin": 780,
+    "endMin": 900,
+    "location": "CSIT N-112"
+  },
+  {
+    "id": "COMP1110-LAB-B",
+    "courseId": "COMP1110",
+    "type": "lab",
+    "day": "Fri",
+    "startMin": 900,
+    "endMin": 1020,
+    "location": "CSIT N-112"
+  },
+  {
+    "id": "COMP1710-LEC-01",
+    "courseId": "COMP1710",
+    "type": "lecture",
+    "day": "Wed",
+    "startMin": 540,
+    "endMin": 600,
+    "location": "Coombs Lecture Theatre"
+  },
+  {
+    "id": "COMP1710-TUT-A",
+    "courseId": "COMP1710",
+    "type": "tutorial",
+    "day": "Thu",
+    "startMin": 540,
+    "endMin": 600,
+    "location": "CSIT N-303"
+  },
+  {
+    "id": "COMP1710-TUT-B",
+    "courseId": "COMP1710",
+    "type": "tutorial",
+    "day": "Fri",
+    "startMin": 540,
+    "endMin": 600,
+    "location": "CSIT N-303"
+  },
+  {
+    "id": "COMP1710-LAB-A",
+    "courseId": "COMP1710",
+    "type": "lab",
+    "day": "Mon",
+    "startMin": 840,
+    "endMin": 960,
+    "location": "CSIT N-114"
+  },
+  {
+    "id": "COMP2400-LEC-01",
+    "courseId": "COMP2400",
+    "type": "lecture",
+    "day": "Mon",
+    "startMin": 660,
+    "endMin": 720,
+    "location": "Coombs Lecture Theatre"
+  },
+  {
+    "id": "COMP2400-TUT-A",
+    "courseId": "COMP2400",
+    "type": "tutorial",
+    "day": "Wed",
+    "startMin": 600,
+    "endMin": 660,
+    "location": "CSIT N-205"
+  },
+  {
+    "id": "COMP2400-TUT-B",
+    "courseId": "COMP2400",
+    "type": "tutorial",
+    "day": "Thu",
+    "startMin": 840,
+    "endMin": 900,
+    "location": "CSIT N-205"
+  },
+  {
+    "id": "COMP2400-LAB-A",
+    "courseId": "COMP2400",
+    "type": "lab",
+    "day": "Thu",
+    "startMin": 960,
+    "endMin": 1080,
+    "location": "CSIT N-118"
+  },
+  {
+    "id": "COMP2610-LEC-01",
+    "courseId": "COMP2610",
+    "type": "lecture",
+    "day": "Wed",
+    "startMin": 660,
+    "endMin": 720,
+    "location": "Marie Reay LT"
+  },
+  {
+    "id": "COMP2610-TUT-A",
+    "courseId": "COMP2610",
+    "type": "tutorial",
+    "day": "Tue",
+    "startMin": 960,
+    "endMin": 1020,
+    "location": "CSIT N-101"
+  },
+  {
+    "id": "COMP2610-TUT-B",
+    "courseId": "COMP2610",
+    "type": "tutorial",
+    "day": "Fri",
+    "startMin": 660,
+    "endMin": 720,
+    "location": "CSIT N-101"
+  },
+  {
+    "id": "COMP2610-LAB-A",
+    "courseId": "COMP2610",
+    "type": "lab",
+    "day": "Wed",
+    "startMin": 960,
+    "endMin": 1080,
+    "location": "CSIT N-120"
+  },
+  {
+    "id": "ENGN1211-LEC-01",
+    "courseId": "ENGN1211",
+    "type": "lecture",
+    "day": "Tue",
+    "startMin": 660,
+    "endMin": 720,
+    "location": "Llewellyn Hall"
+  },
+  {
+    "id": "ENGN1211-TUT-A",
+    "courseId": "ENGN1211",
+    "type": "tutorial",
+    "day": "Wed",
+    "startMin": 480,
+    "endMin": 540,
+    "location": "Engineering N-115"
+  },
+  {
+    "id": "ENGN1211-TUT-B",
+    "courseId": "ENGN1211",
+    "type": "tutorial",
+    "day": "Fri",
+    "startMin": 780,
+    "endMin": 840,
+    "location": "Engineering N-115"
+  },
+  {
+    "id": "ENGN1211-LAB-A",
+    "courseId": "ENGN1211",
+    "type": "lab",
+    "day": "Mon",
+    "startMin": 960,
+    "endMin": 1080,
+    "location": "Engineering Lab 105"
+  },
+  {
+    "id": "ENGN1211-LAB-B",
+    "courseId": "ENGN1211",
+    "type": "lab",
+    "day": "Thu",
+    "startMin": 540,
+    "endMin": 660,
+    "location": "Engineering Lab 105"
+  },
+  {
+    "id": "MATH1013-LEC-01",
+    "courseId": "MATH1013",
+    "type": "lecture",
+    "day": "Mon",
+    "startMin": 780,
+    "endMin": 840,
+    "location": "Manning Clark Theatre"
+  },
+  {
+    "id": "MATH1013-TUT-A",
+    "courseId": "MATH1013",
+    "type": "tutorial",
+    "day": "Tue",
+    "startMin": 600,
+    "endMin": 660,
+    "location": "Hanna Neumann J-201"
+  },
+  {
+    "id": "MATH1013-TUT-B",
+    "courseId": "MATH1013",
+    "type": "tutorial",
+    "day": "Thu",
+    "startMin": 660,
+    "endMin": 720,
+    "location": "Hanna Neumann J-201"
+  },
+  {
+    "id": "MATH1013-TUT-C",
+    "courseId": "MATH1013",
+    "type": "tutorial",
+    "day": "Fri",
+    "startMin": 840,
+    "endMin": 900,
+    "location": "Hanna Neumann J-201"
+  },
+  {
+    "id": "MATH1014-LEC-01",
+    "courseId": "MATH1014",
+    "type": "lecture",
+    "day": "Thu",
+    "startMin": 780,
+    "endMin": 840,
+    "location": "Manning Clark Theatre"
+  },
+  {
+    "id": "MATH1014-TUT-A",
+    "courseId": "MATH1014",
+    "type": "tutorial",
+    "day": "Wed",
+    "startMin": 720,
+    "endMin": 780,
+    "location": "Hanna Neumann J-202"
+  },
+  {
+    "id": "MATH1014-TUT-B",
+    "courseId": "MATH1014",
+    "type": "tutorial",
+    "day": "Fri",
+    "startMin": 960,
+    "endMin": 1020,
+    "location": "Hanna Neumann J-202"
+  },
+  {
+    "id": "STAT1003-LEC-01",
+    "courseId": "STAT1003",
+    "type": "lecture",
+    "day": "Tue",
+    "startMin": 780,
+    "endMin": 840,
+    "location": "Coombs Lecture Theatre"
+  },
+  {
+    "id": "STAT1003-TUT-A",
+    "courseId": "STAT1003",
+    "type": "tutorial",
+    "day": "Mon",
+    "startMin": 960,
+    "endMin": 1020,
+    "location": "Hanna Neumann J-105"
+  },
+  {
+    "id": "STAT1003-TUT-B",
+    "courseId": "STAT1003",
+    "type": "tutorial",
+    "day": "Thu",
+    "startMin": 480,
+    "endMin": 540,
+    "location": "Hanna Neumann J-105"
+  },
+  {
+    "id": "STAT1008-LEC-01",
+    "courseId": "STAT1008",
+    "type": "lecture",
+    "day": "Wed",
+    "startMin": 780,
+    "endMin": 840,
+    "location": "Coombs Lecture Theatre"
+  },
+  {
+    "id": "STAT1008-TUT-A",
+    "courseId": "STAT1008",
+    "type": "tutorial",
+    "day": "Tue",
+    "startMin": 900,
+    "endMin": 960,
+    "location": "Hanna Neumann J-106"
+  },
+  {
+    "id": "STAT1008-TUT-B",
+    "courseId": "STAT1008",
+    "type": "tutorial",
+    "day": "Fri",
+    "startMin": 600,
+    "endMin": 660,
+    "location": "Hanna Neumann J-106"
+  },
+  {
+    "id": "PSYC1003-LEC-01",
+    "courseId": "PSYC1003",
+    "type": "lecture",
+    "day": "Mon",
+    "startMin": 900,
+    "endMin": 960,
+    "location": "Hancock Theatre"
+  },
+  {
+    "id": "PSYC1003-TUT-A",
+    "courseId": "PSYC1003",
+    "type": "tutorial",
+    "day": "Tue",
+    "startMin": 720,
+    "endMin": 780,
+    "location": "Psychology P-201"
+  },
+  {
+    "id": "PSYC1003-TUT-B",
+    "courseId": "PSYC1003",
+    "type": "tutorial",
+    "day": "Thu",
+    "startMin": 960,
+    "endMin": 1020,
+    "location": "Psychology P-201"
+  },
+  {
+    "id": "ECON1101-LEC-01",
+    "courseId": "ECON1101",
+    "type": "lecture",
+    "day": "Thu",
+    "startMin": 900,
+    "endMin": 960,
+    "location": "Copland Theatre"
+  },
+  {
+    "id": "ECON1101-TUT-A",
+    "courseId": "ECON1101",
+    "type": "tutorial",
+    "day": "Wed",
+    "startMin": 900,
+    "endMin": 960,
+    "location": "Copland C-103"
+  },
+  {
+    "id": "ECON1101-TUT-B",
+    "courseId": "ECON1101",
+    "type": "tutorial",
+    "day": "Fri",
+    "startMin": 720,
+    "endMin": 780,
+    "location": "Copland C-103"
+  }
+]
