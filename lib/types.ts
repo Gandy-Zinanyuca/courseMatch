@@ -11,7 +11,11 @@ export type Year = 1 | 2 | 3 | 4;
 export type AgeRange = "18-19" | "20-22" | "23+";
 export type StudyStyle = "alone" | "small" | "large" | "no-preference";
 export type ProductiveTime = "morning" | "afternoon" | "night" | "flexible";
-export type PartnerPriority = "courses" | "goals" | "personality" | "everything";
+export type PartnerPriority =
+  | "courses"
+  | "goals"
+  | "personality"
+  | "everything";
 export type PersonalityQuizDraft = {
   studyStyle: StudyStyle | null;
   productiveTime: ProductiveTime | null;
@@ -60,6 +64,17 @@ export type Session = {
 export type UserSession = {
   userId: StudentId;
   sessionId: string;
+};
+
+export type StudyGroup = {
+  id: string;
+  courseCode: string;
+  name: string;
+  description: string;
+  ownerId: StudentId;
+  memberIds: StudentId[];
+  requestIds: StudentId[];
+  chat: ChatMessage[];
 };
 
 export type SharedSession = {

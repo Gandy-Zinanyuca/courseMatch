@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Compass, Search, User2 } from "lucide-react";
+import { Bell, BookOpen, Compass, Search, User2 } from "lucide-react";
 import { useStore } from "@/lib/store";
 
 const items = [
   { href: "/discover", label: "Discover", icon: Compass },
+  { href: "/studyGroups", label: "Study Groups", icon: BookOpen },
+  { href: "/notifications", label: "Notifications", icon: Bell },
   { href: "/search", label: "Search", icon: Search },
   { href: "/profile", label: "My profile", icon: User2 },
 ];
@@ -26,7 +28,10 @@ export function TopNav() {
   return (
     <header className="bg-white border-b border-[#E0D8CC]">
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <Link href="/" className="font-serif text-xl text-anu-navy tracking-tight">
+        <Link
+          href="/"
+          className="font-serif text-xl text-anu-navy tracking-tight"
+        >
           courseMatch
         </Link>
         {currentUserId && !onboarding && (

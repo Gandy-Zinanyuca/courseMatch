@@ -8,6 +8,7 @@ import type {
   PersonalityQuizDraft,
   Session,
   StudentId,
+  StudyGroup,
   User,
   UserSession,
 } from "./types";
@@ -21,6 +22,31 @@ const SEED_COURSES = coursesJson as Course[];
 const SEED_SESSIONS = sessionsJson as Session[];
 const SEED_STUDENTS = studentsJson as User[];
 const SEED_USER_SESSIONS = userSessionsJson as UserSession[];
+const SEED_STUDY_GROUPS: StudyGroup[] = [
+  {
+    id: "g1",
+    courseCode: "COMP1100",
+    name: "COMP1100 Study Circle",
+    description: "Share schedules, swap sessions, and chat about assignments.",
+    ownerId: SEED_STUDENTS[0].id,
+    memberIds: [SEED_STUDENTS[0].id, SEED_STUDENTS[1].id],
+    requestIds: [SEED_STUDENTS[2].id],
+    chat: [
+      {
+        id: "c1",
+        sender: "them",
+        text: "Anyone free to swap into Thursday tutorial?",
+        at: Date.now() - 1000 * 60 * 45,
+      },
+      {
+        id: "c2",
+        sender: "me",
+        text: "I can join if someone moves into the 10am session.",
+        at: Date.now() - 1000 * 60 * 20,
+      },
+    ],
+  },
+];
 
 type PersistedSlice = {
   currentUserId: StudentId | null;
@@ -31,6 +57,7 @@ type PersistedSlice = {
   // Optional time-warp for "free now" demos. null = real time.
   timeWarp: { day: number; minute: number } | null; // 0=Mon..4=Fri
   chatByUserId: Record<StudentId, ChatMessage[]>;
+  studyGroups: StudyGroup[];
   hasSeenTutorial: boolean;
 };
 
@@ -50,6 +77,9 @@ type State = PersistedSlice & {
   sessionById: (id: string) => Session | undefined;
   courseByCode: (code: string) => Course | undefined;
   sessionsForUser: (userId: StudentId) => Session[];
+  groupByCourse: (courseCode: string) => StudyGroup[];
+  groupsForUser: (userId: StudentId) => StudyGroup[];
+  groupById: (groupId: string) => StudyGroup | undefined;
 
   // Mutations
   completeOnboarding: (user: User, sessionIds: string[]) => void;
@@ -64,6 +94,16 @@ type State = PersistedSlice & {
   chatForUser: (userId: StudentId) => ChatMessage[];
   appendChatMessage: (userId: StudentId, message: ChatMessage) => void;
   clearChatForUser: (userId: StudentId) => void;
+  createStudyGroup: (
+    courseCode: string,
+    name: string,
+    description: string,
+  ) => void;
+  requestJoinGroup: (groupId: string) => void;
+  approveJoinRequest: (groupId: string, userId: StudentId) => void;
+  declineJoinRequest: (groupId: string, userId: StudentId) => void;
+  leaveStudyGroup: (groupId: string) => void;
+  appendGroupChatMessage: (groupId: string, message: ChatMessage) => void;
   setHasSeenTutorial: (b: boolean) => void;
 };
 
@@ -76,6 +116,7 @@ export const useStore = create<State>()(
       personalityDraft: null,
       timeWarp: null,
       chatByUserId: {},
+      studyGroups: SEED_STUDY_GROUPS,
       hasSeenTutorial: false,
       hydrated: false,
       setHydrated: (b) => set({ hydrated: b }),
@@ -110,6 +151,15 @@ export const useStore = create<State>()(
           .map((u) => u.sessionId);
         return get().sessions.filter((s) => ids.includes(s.id));
       },
+      groupByCourse: (courseCode) =>
+        get().studyGroups.filter((group) => group.courseCode === courseCode),
+      groupsForUser: (userId) =>
+        get().studyGroups.filter(
+          (group) =>
+            group.ownerId === userId || group.memberIds.includes(userId),
+        ),
+      groupById: (groupId) =>
+        get().studyGroups.find((group) => group.id === groupId),
 
       completeOnboarding: (user, sessionIds) => {
         set({
@@ -196,6 +246,93 @@ export const useStore = create<State>()(
           personalityDraft: null,
           timeWarp: null,
           chatByUserId: {},
+          studyGroups: SEED_STUDY_GROUPS,
+        });
+      },
+      createStudyGroup: (courseCode, name, description) => {
+        const userId = get().currentUserId;
+        if (!userId) return;
+        const id =
+          typeof crypto !== "undefined" && crypto.randomUUID
+            ? crypto.randomUUID()
+            : `g${Date.now()}`;
+        const newGroup: StudyGroup = {
+          id,
+          courseCode,
+          name,
+          description,
+          ownerId: userId,
+          memberIds: [userId],
+          requestIds: [],
+          chat: [],
+        };
+        set({ studyGroups: [newGroup, ...get().studyGroups] });
+      },
+      requestJoinGroup: (groupId) => {
+        const userId = get().currentUserId;
+        if (!userId) return;
+        set({
+          studyGroups: get().studyGroups.map((group) =>
+            group.id !== groupId
+              ? group
+              : {
+                  ...group,
+                  requestIds: group.requestIds.includes(userId)
+                    ? group.requestIds
+                    : [...group.requestIds, userId],
+                },
+          ),
+        });
+      },
+      approveJoinRequest: (groupId, userId) => {
+        set({
+          studyGroups: get().studyGroups.map((group) =>
+            group.id !== groupId
+              ? group
+              : {
+                  ...group,
+                  memberIds: group.memberIds.includes(userId)
+                    ? group.memberIds
+                    : [...group.memberIds, userId],
+                  requestIds: group.requestIds.filter((id) => id !== userId),
+                },
+          ),
+        });
+      },
+      declineJoinRequest: (groupId, userId) => {
+        set({
+          studyGroups: get().studyGroups.map((group) =>
+            group.id !== groupId
+              ? group
+              : {
+                  ...group,
+                  requestIds: group.requestIds.filter((id) => id !== userId),
+                },
+          ),
+        });
+      },
+      leaveStudyGroup: (groupId) => {
+        const userId = get().currentUserId;
+        if (!userId) return;
+        set({
+          studyGroups: get().studyGroups.map((group) =>
+            group.id !== groupId
+              ? group
+              : {
+                  ...group,
+                  memberIds: group.memberIds.filter((id) => id !== userId),
+                  requestIds: group.requestIds.filter((id) => id !== userId),
+                },
+          ),
+        });
+      },
+      appendGroupChatMessage: (groupId, message) => {
+        set({
+          studyGroups: get().studyGroups.map((group) =>
+            group.id !== groupId
+              ? group
+              : { ...group, chat: [...group.chat, message] },
+          ),
         });
       },
       setTimeWarp: (t) => set({ timeWarp: t }),
@@ -211,6 +348,7 @@ export const useStore = create<State>()(
         personalityDraft: s.personalityDraft,
         timeWarp: s.timeWarp,
         chatByUserId: s.chatByUserId,
+        studyGroups: s.studyGroups,
         hasSeenTutorial: s.hasSeenTutorial,
       }),
       onRehydrateStorage: () => (state) => {

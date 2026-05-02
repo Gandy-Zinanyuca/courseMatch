@@ -46,9 +46,14 @@ function ProfileInner() {
   const swapMySession = useStore((s) => s.swapMySession);
   const studentById = useStore((s) => s.studentById);
   const sessionsForUser = useStore((s) => s.sessionsForUser);
+  const groupsForUser = useStore((s) => s.groupsForUser);
   const updateMyProfile = useStore((s) => s.updateMyProfile);
   const hasSeenTutorial = useStore((s) => s.hasSeenTutorial);
   const setHasSeenTutorial = useStore((s) => s.setHasSeenTutorial);
+  const myGroups = useMemo(
+    () => (me ? groupsForUser(me.id) : []),
+    [me, groupsForUser],
+  );
 
   const toast = useToast();
   const [showEdit, setShowEdit] = useState(false);
@@ -155,6 +160,59 @@ function ProfileInner() {
       />
 
       <ProfileSummary user={me} />
+
+      <section className="card space-y-4 rounded-3xl border border-[#E0D8CC] p-5">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.16em] text-muted">
+              My study groups
+            </div>
+            <h2 className="text-lg font-semibold text-anu-navy">
+              Groups by course
+            </h2>
+          </div>
+          <div className="text-sm text-muted">
+            {myGroups.length} group{myGroups.length === 1 ? "" : "s"}
+          </div>
+        </div>
+        {myGroups.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-[#E0D8CC] bg-white p-6 text-sm text-anu-navy/80">
+            You’re not in any study groups yet.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {myGroups.map((group) => {
+              const course = courses.find(
+                (course) => course.code === group.courseCode,
+              );
+              return (
+                <div
+                  key={group.id}
+                  className="rounded-3xl border border-[#E0D8CC] bg-white p-4"
+                >
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <div className="font-medium text-anu-navy">
+                        {group.name}
+                      </div>
+                      <div className="text-xs text-muted">
+                        {course?.code} — {course?.name}
+                      </div>
+                    </div>
+                    <div className="text-xs text-anu-navy/70">
+                      {group.memberIds.length} members ·{" "}
+                      {group.requestIds.length} requests
+                    </div>
+                  </div>
+                  <p className="mt-3 text-sm text-anu-navy/75">
+                    {group.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
 
       {showEdit && (
         <EditProfileModal
