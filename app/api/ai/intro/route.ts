@@ -6,15 +6,17 @@ export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {
-    const { me, other, shared } = (await req.json()) as {
+    const { me, other, shared, variant } = (await req.json()) as {
       me: User;
       other: User;
       shared: SharedSession[];
+      variant?: number;
     };
     if (!me || !other) {
       return NextResponse.json({ error: "missing me/other" }, { status: 400 });
     }
-    const message = await introMessage(me, other, shared ?? []);
+    const safeVariant = Number.isFinite(variant) ? Number(variant) : 0;
+    const message = await introMessage(me, other, shared ?? [], safeVariant);
     return NextResponse.json({ message });
   } catch (e: any) {
     return NextResponse.json({

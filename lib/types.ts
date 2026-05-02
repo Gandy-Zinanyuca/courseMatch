@@ -80,6 +80,15 @@ export type Match = {
   blurb?: string;
 };
 
+export type ChatSender = "me" | "them";
+
+export type ChatMessage = {
+  id: string;
+  sender: ChatSender;
+  text: string;
+  at: number;
+};
+
 // Bounds for the timetable grid (in minutes from midnight).
 export const GRID_START_MIN = 8 * 60; // 08:00
 export const GRID_END_MIN = 19 * 60; // 19:00

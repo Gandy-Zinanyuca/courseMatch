@@ -62,7 +62,8 @@ Phrase:`;
 export async function introMessage(
   from: User,
   to: User,
-  shared: SharedSession[]
+  shared: SharedSession[],
+  variant = 0
 ): Promise<string> {
   const c = client();
   const sameSessions = shared.filter((s) => s.status === "same");
@@ -81,11 +82,16 @@ export async function introMessage(
     const interestLine = sharedInterests.length
       ? ` Saw you're into ${sharedInterests[0]} too.`
       : "";
-    return `Hey ${to.name.split(" ")[0]} — ${courseLine}.${interestLine} Wanted to say hi.`;
+    const variants = [
+      `Hey ${to.name.split(" ")[0]} - ${courseLine}.${interestLine} Wanted to say hi.`,
+      `Hi ${to.name.split(" ")[0]}, noticed ${courseLine}.${interestLine} Keen to connect for study sometime.`,
+      `Hey ${to.name.split(" ")[0]}, I think ${courseLine}.${interestLine} Thought I'd reach out.`
+    ];
+    return variants[Math.abs(variant) % variants.length];
   }
 
   const sys =
-    "You draft very short, casual opening messages between two university classmates who haven't met. 2 sentences max. Friendly but not over-the-top. No emojis. Reference one shared course or session and one shared interest if available. Use first names only.";
+    "You draft very short, casual opening messages between two university classmates who haven't met. 2 sentences max. Friendly but not over-the-top. No emojis. Reference one shared course or session and one shared interest if available. Use first names only. Produce a fresh wording each time and avoid repeating prior phrasings.";
   const usr = `From: ${from.name} (year ${from.year}, ${from.degree}, into ${from.freeTimeInterests.join(
     "/"
   ) || "n/a"})
@@ -94,6 +100,7 @@ To: ${to.name} (year ${to.year}, ${to.degree}, into ${to.freeTimeInterests.join(
 Same sessions: ${sameSessions.map((s) => `${s.courseCode} ${s.type}`).join(", ") || "none"}
 Same courses (different sessions): ${swap.map((s) => `${s.courseCode} ${s.type}`).join(", ") || "none"}
 Shared interests: ${sharedInterests.join(", ") || "none"}
+Variation seed: ${variant}
 
 Write the opener (no preamble, no quotes):`;
 

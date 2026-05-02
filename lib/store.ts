@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type {
+  ChatMessage,
   Course,
   PersonalityQuizDraft,
   Session,
@@ -29,6 +30,7 @@ type PersistedSlice = {
   personalityDraft: PersonalityQuizDraft | null;
   // Optional time-warp for "free now" demos. null = real time.
   timeWarp: { day: number; minute: number } | null; // 0=Mon..4=Fri
+  chatByUserId: Record<StudentId, ChatMessage[]>;
 };
 
 type State = PersistedSlice & {
@@ -58,6 +60,9 @@ type State = PersistedSlice & {
   setCurrentUser: (id: StudentId | null) => void; // dev switcher
   resetDemo: () => void;
   setTimeWarp: (t: PersistedSlice["timeWarp"]) => void;
+  chatForUser: (userId: StudentId) => ChatMessage[];
+  appendChatMessage: (userId: StudentId, message: ChatMessage) => void;
+  clearChatForUser: (userId: StudentId) => void;
 };
 
 export const useStore = create<State>()(
@@ -68,6 +73,7 @@ export const useStore = create<State>()(
       myUserSessions: [],
       personalityDraft: null,
       timeWarp: null,
+      chatByUserId: {},
       hydrated: false,
       setHydrated: (b) => set({ hydrated: b }),
 
@@ -127,9 +133,24 @@ export const useStore = create<State>()(
           ),
         });
       },
+      chatForUser: (userId) => get().chatByUserId[userId] ?? [],
+      appendChatMessage: (userId, message) => {
+        const existing = get().chatByUserId[userId] ?? [];
+        set({
+          chatByUserId: {
+            ...get().chatByUserId,
+            [userId]: [...existing, message],
+          },
+        });
+      },
+      clearChatForUser: (userId) => {
+        const next = { ...get().chatByUserId };
+        delete next[userId];
+        set({ chatByUserId: next });
+      },
       setCurrentUser: (id) => {
         if (id === null) {
-          set({ currentUserId: null, myProfile: null, myUserSessions: [] });
+          set({ currentUserId: null, myProfile: null, myUserSessions: [], chatByUserId: {} });
           return;
         }
         const seed = SEED_STUDENTS.find((s) => s.id === id);
@@ -150,6 +171,7 @@ export const useStore = create<State>()(
           myUserSessions: [],
           personalityDraft: null,
           timeWarp: null,
+          chatByUserId: {},
         });
       },
       setTimeWarp: (t) => set({ timeWarp: t }),
@@ -163,6 +185,7 @@ export const useStore = create<State>()(
         myUserSessions: s.myUserSessions,
         personalityDraft: s.personalityDraft,
         timeWarp: s.timeWarp,
+        chatByUserId: s.chatByUserId,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated(true);
