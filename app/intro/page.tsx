@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/store";
 import { cx } from "@/lib/cx";
@@ -12,7 +12,9 @@ import {
   type ProductiveTime,
   type StudyStyle,
 } from "@/lib/types";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Users, BookOpen, Calendar } from "lucide-react";
+
+// ─── Quiz data ────────────────────────────────────────────────────────────────
 
 type QuizQuestion = {
   key: "studyStyle" | "productiveTime" | "partnerPriority" | "freeTimeInterests";
@@ -20,7 +22,7 @@ type QuizQuestion = {
   q: string;
   helper: string;
   multiSelect?: boolean;
-  opts: readonly { label: string; value: string | number }[];
+  opts: readonly { label: string; value: string }[];
 };
 
 const QUIZ: QuizQuestion[] = [
@@ -28,76 +30,56 @@ const QUIZ: QuizQuestion[] = [
     key: "studyStyle",
     eyebrow: "Study shape",
     q: "How do you actually like to study?",
-    helper: "This is the first signal we use for personality fit.",
+    helper: "First signal for personality matching.",
     opts: [
       { label: "Solo, locked in", value: "alone" },
-      { label: "Small crew, 2-3 people", value: "small" },
+      { label: "Small crew (2–3)", value: "small" },
       { label: "Bigger, louder group", value: "large" },
       { label: "Depends on the subject", value: "no-preference" },
-    ] as const,
+    ],
   },
   {
     key: "productiveTime",
     eyebrow: "Energy curve",
     q: "When are you most dangerous to your to-do list?",
-    helper: "We try to match you with people on the same rhythm.",
+    helper: "We match people on the same rhythm.",
     opts: [
       { label: "Early morning", value: "morning" },
       { label: "Afternoon grind", value: "afternoon" },
       { label: "Late-night mode", value: "night" },
       { label: "It shifts around", value: "flexible" },
-    ] as const,
+    ],
   },
   {
     key: "partnerPriority",
     eyebrow: "Match signal",
     q: "What matters most in a study buddy?",
-    helper: "This one directly changes the recommendation ranking.",
+    helper: "This directly changes who shows up first.",
     opts: [
       { label: "Same courses", value: "courses" },
       { label: "Similar goals", value: "goals" },
       { label: "Personality fit", value: "personality" },
       { label: "The full package", value: "everything" },
-    ] as const,
+    ],
   },
   {
     key: "freeTimeInterests",
     eyebrow: "Off-duty vibe",
-    q: "What do you usually do when you’re not studying?",
+    q: "What do you get up to when you're not studying?",
     helper: "Pick as many as feel right.",
     multiSelect: true,
     opts: FREE_TIME_OPTIONS.map((item) => ({ label: item, value: item })),
   },
-] as const;
+];
 
-type QuizKey = (typeof QUIZ)[number]["key"];
-type QuizDraft = PersonalityQuizDraft;
-
-const EMPTY_DRAFT: QuizDraft = {
+const EMPTY_DRAFT: PersonalityQuizDraft = {
   studyStyle: null,
   productiveTime: null,
   partnerPriority: null,
   freeTimeInterests: [],
 };
 
-const STUDY_LABELS: Record<StudyStyle, string> = {
-  alone: "Solo focus",
-  small: "Small crew",
-  large: "Group energy",
-  "no-preference": "Flexible",
-};
-const PRODUCTIVE_LABELS: Record<ProductiveTime, string> = {
-  morning: "Morning",
-  afternoon: "Afternoon",
-  night: "Night owl",
-  flexible: "Flexible",
-};
-const PRIORITY_LABELS: Record<PartnerPriority, string> = {
-  courses: "Same courses",
-  goals: "Similar goals",
-  personality: "Personality fit",
-  everything: "The full package",
-};
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function IntroPage() {
   const router = useRouter();
@@ -106,10 +88,11 @@ export default function IntroPage() {
   const storedDraft = useStore((s) => s.personalityDraft);
   const setPersonalityDraft = useStore((s) => s.setPersonalityDraft);
 
-  const [draft, setDraft] = useState<QuizDraft>(storedDraft ?? EMPTY_DRAFT);
+  const [draft, setDraft] = useState<PersonalityQuizDraft>(storedDraft ?? EMPTY_DRAFT);
   const [index, setIndex] = useState(0);
-  const [chosen, setChosen] = useState<string | number | null>(null);
-  const [donePulse, setDonePulse] = useState(false);
+  const [chosen, setChosen] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+  const quizRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (storedDraft) setDraft(storedDraft);
@@ -121,209 +104,347 @@ export default function IntroPage() {
 
   const question = QUIZ[index];
   const isLast = index === QUIZ.length - 1;
-  const summary = useMemo(() => {
-    const items: { label: string; value: string }[] = [];
-    if (draft.studyStyle) items.push({ label: "Study", value: STUDY_LABELS[draft.studyStyle] });
-    if (draft.productiveTime)
-      items.push({ label: "Energy", value: PRODUCTIVE_LABELS[draft.productiveTime] });
-    if (draft.partnerPriority)
-      items.push({ label: "Match", value: PRIORITY_LABELS[draft.partnerPriority] });
-    if (draft.freeTimeInterests.length > 0) {
-      items.push({ label: "Life", value: draft.freeTimeInterests.join(", ") });
-    }
-    return items;
-  }, [draft]);
 
-  function updateDraft(
-    key: Exclude<QuizKey, "freeTimeInterests">,
-    value: StudyStyle | ProductiveTime | PartnerPriority
-  ) {
-    setDraft((current) => ({ ...current, [key]: value } as QuizDraft));
+  function scrollToQuiz() {
+    quizRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function finish() {
     setPersonalityDraft(draft);
-    setDonePulse(true);
-    window.setTimeout(() => router.push("/onboarding"), 450);
+    setDone(true);
+    window.setTimeout(() => router.push("/onboarding"), 380);
   }
 
   function nextOrFinish() {
-    if (isLast) {
-      finish();
-      return;
-    }
+    if (isLast) { finish(); return; }
     setChosen(null);
-    setIndex((current) => current + 1);
+    setIndex((i) => i + 1);
   }
 
-  function selectSingle(value: string | number) {
+  function selectSingle(value: string) {
     if (chosen !== null) return;
     setChosen(value);
-    updateDraft(question.key as Exclude<QuizKey, "freeTimeInterests">, value as never);
+    setDraft((d) => ({ ...d, [question.key]: value } as PersonalityQuizDraft));
     window.setTimeout(nextOrFinish, 220);
   }
 
   function toggleInterest(value: FreeTime) {
-    setDraft((current) => {
-      const next = current.freeTimeInterests.includes(value)
-        ? current.freeTimeInterests.filter((item) => item !== value)
-        : [...current.freeTimeInterests, value];
-      return { ...current, freeTimeInterests: next };
+    setDraft((d) => {
+      const has = d.freeTimeInterests.includes(value);
+      return {
+        ...d,
+        freeTimeInterests: has
+          ? d.freeTimeInterests.filter((x) => x !== value)
+          : [...d.freeTimeInterests, value],
+      };
     });
   }
 
+  const answersSoFar = useMemo(() => {
+    const chips: { label: string; value: string }[] = [];
+    if (draft.studyStyle) chips.push({ label: "Study", value: draft.studyStyle });
+    if (draft.productiveTime) chips.push({ label: "Energy", value: draft.productiveTime });
+    if (draft.partnerPriority) chips.push({ label: "Match", value: draft.partnerPriority });
+    if (draft.freeTimeInterests.length)
+      chips.push({ label: "Life", value: draft.freeTimeInterests.join(", ") });
+    return chips;
+  }, [draft]);
+
   if (!hydrated) {
-    return <div className="py-24 text-center text-muted">Loading quiz…</div>;
+    return (
+      <div className="-mx-6 -my-6 min-h-screen flex items-center justify-center bg-[#F5F0E8]">
+        <span className="text-muted text-sm">Loading…</span>
+      </div>
+    );
   }
 
   return (
-    <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-6 items-stretch">
-      <section className="relative overflow-hidden rounded-[32px] border border-[#D8CCBE] bg-[linear-gradient(135deg,#1C2340_0%,#2D355A_48%,#C4714A_150%)] p-6 sm:p-8 text-white shadow-[0_20px_50px_rgba(28,35,64,0.22)]">
-        <div className="absolute -top-20 -right-16 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
-        <div className="absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-[#7A9E8A]/25 blur-3xl" />
-        <div className="relative z-10 flex h-full flex-col justify-between gap-10">
-          <div className="space-y-5 max-w-xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/80">
-              <Sparkles size={12} /> Personality quiz
+    /* Full-bleed wrapper — breaks out of the layout's max-w-6xl padding */
+    <div className="-mx-6 -my-6 min-h-screen overflow-x-hidden">
+
+      {/* ── Mesh-gradient background ─────────────────────────────── */}
+      <div
+        className="fixed inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 10% 10%, #FFD4C8 0%, transparent 55%)," +
+            "radial-gradient(ellipse 70% 50% at 90% 20%, #C8E6F5 0%, transparent 55%)," +
+            "radial-gradient(ellipse 60% 70% at 50% 80%, #D4ECD8 0%, transparent 55%)," +
+            "#FFF8F3",
+        }}
+      />
+
+      <div className="max-w-6xl mx-auto px-6 pt-10 pb-20 space-y-20">
+
+        {/* ══════════════════════════════════════════════════
+            HERO
+        ══════════════════════════════════════════════════ */}
+        <section className="relative grid lg:grid-cols-[1fr_auto] gap-10 items-start pt-4">
+
+          {/* Decorative blobs */}
+          <div className="pointer-events-none absolute -top-16 -right-10 h-72 w-72 rounded-full bg-[#C8E6F5]/50 blur-3xl -z-10" />
+          <div className="pointer-events-none absolute top-32 -left-14 h-56 w-56 rounded-full bg-[#FFD4C8]/60 blur-3xl -z-10" />
+
+          {/* Headline + CTA */}
+          <div className="space-y-6 max-w-xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#D8CCBE] bg-white/70 px-4 py-1.5 text-[11px] uppercase tracking-[0.24em] text-anu-navy/70 backdrop-blur-sm">
+              ANU · Semester 1, 2026
             </div>
-            <div className="space-y-4">
-              <h1 className="font-serif text-4xl sm:text-5xl leading-[0.95] tracking-tight">
-                Before we build your profile, learn your study vibe.
-              </h1>
-              <p className="max-w-xl text-sm sm:text-base text-white/78 leading-6">
-                Four quick prompts. No essay. We use the answers to rank classmates by more than just shared classes.
-              </p>
+
+            <h1 className="font-serif leading-[0.92] tracking-tight">
+              <span className="block text-5xl sm:text-6xl lg:text-7xl text-anu-navy">Find your</span>
+              <span
+                className="block text-5xl sm:text-6xl lg:text-7xl"
+                style={{
+                  WebkitTextStroke: "2px #C4714A",
+                  color: "transparent",
+                }}
+              >
+                people
+              </span>
+              <span className="block text-5xl sm:text-6xl lg:text-7xl text-anu-navy">at ANU.</span>
+            </h1>
+
+            <p className="text-base sm:text-lg text-anu-navy/65 leading-7 max-w-md">
+              Match with classmates who share your labs and tutorials — then swap timetable slots to study together for real.
+            </p>
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={scrollToQuiz}
+                className="inline-flex items-center gap-2 rounded-full bg-terra px-7 py-3.5 text-sm font-medium text-white shadow-[0_4px_20px_rgba(196,113,74,0.35)] hover:opacity-90 transition"
+              >
+                Take the quiz <ArrowRight size={15} />
+              </button>
+              <a
+                href="/onboarding"
+                className="inline-flex items-center gap-2 rounded-full border border-[#D8CCBE] bg-white/70 px-7 py-3.5 text-sm font-medium text-anu-navy hover:bg-white transition backdrop-blur-sm"
+              >
+                Skip quiz →
+              </a>
             </div>
-            <div className="grid grid-cols-3 gap-3 max-w-lg">
-              <Metric label="Time" value="~2 min" />
-              <Metric label="Questions" value="4" />
-              <Metric label="Signal" value="Personality + courses" />
+
+            {/* Stats row */}
+            <div className="flex flex-wrap gap-6 pt-2">
+              <Stat icon={<Users size={14} />} value="25+" label="classmates" />
+              <Stat icon={<BookOpen size={14} />} value="12" label="courses" />
+              <Stat icon={<Calendar size={14} />} value="47" label="sessions" />
             </div>
           </div>
 
-          <div className="space-y-3">
-            <p className="text-[10px] uppercase tracking-[0.22em] text-white/60">What this unlocks</p>
-            <div className="flex flex-wrap gap-2 text-sm text-white/85">
-              <Badge>Sharper recommendations</Badge>
-              <Badge>Better intro blurbs</Badge>
-              <Badge>Less random matching</Badge>
-            </div>
+          {/* Floating feature cards — right column (desktop) */}
+          <div className="hidden lg:flex flex-col gap-3 w-64 mt-6">
+            <FloatCard
+              accent="#C4714A"
+              title="Same session?"
+              body="Find out who sits in your exact lab or tutorial — and message them directly."
+            />
+            <FloatCard
+              accent="#7A9E8A"
+              title="Can swap?"
+              body="If you're in different sessions of the same course, one click proposes a timetable swap."
+            />
+            <FloatCard
+              accent="#5B8AC4"
+              title="Personality match"
+              body="Four quick answers shape who we surface first — study style, energy, interests."
+            />
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="card p-5 sm:p-6 space-y-5 bg-white/92 backdrop-blur">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.24em] text-muted">Question {index + 1} of {QUIZ.length}</p>
-            <div className="mt-2 h-1.5 w-36 rounded-full bg-[#EFE7DC] overflow-hidden">
-              <div
-                className="h-full rounded-full bg-terra transition-all duration-300"
-                style={{ width: `${((index + 1) / QUIZ.length) * 100}%` }}
-              />
-            </div>
+        {/* ══════════════════════════════════════════════════
+            HOW IT WORKS
+        ══════════════════════════════════════════════════ */}
+        <section className="space-y-6">
+          <div className="text-center space-y-2">
+            <p className="text-[11px] uppercase tracking-[0.26em] text-muted">How it works</p>
+            <h2 className="font-serif text-3xl sm:text-4xl text-anu-navy">Three steps. Five minutes.</h2>
           </div>
-          <div className="text-[11px] text-muted text-right max-w-[11rem]">
-            {draft.partnerPriority === "personality" || draft.partnerPriority === "everything"
-              ? "We’ll lean harder into personality fit."
-              : "You can make this more social or more course-first."}
+
+          <div className="grid sm:grid-cols-3 gap-4">
+            <HowCard
+              step="01"
+              title="Take the quiz"
+              body="Tell us how you study, when you're switched on, and what you do off-duty."
+              bg="bg-[#FFF0EB]"
+              accent="text-terra"
+            />
+            <HowCard
+              step="02"
+              title="Add your courses"
+              body="Pick your exact lecture, tutorial, and lab sessions from the ANU timetable."
+              bg="bg-[#EBF5EF]"
+              accent="text-sage"
+            />
+            <HowCard
+              step="03"
+              title="Meet your matches"
+              body="Browse classmates ranked by shared sessions and personality fit. Swap if needed."
+              bg="bg-[#EBF0FA]"
+              accent="text-[#5B8AC4]"
+            />
           </div>
-        </div>
+        </section>
 
-        <div className="space-y-2">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-muted">{question.eyebrow}</p>
-          <h2 className="font-serif text-[1.8rem] leading-tight text-anu-navy">{question.q}</h2>
-          <p className="text-sm text-muted">{question.helper}</p>
-        </div>
+        {/* ══════════════════════════════════════════════════
+            PERSONALITY QUIZ
+        ══════════════════════════════════════════════════ */}
+        <section ref={quizRef} className="scroll-mt-8 space-y-6">
+          <div className="text-center space-y-2">
+            <p className="text-[11px] uppercase tracking-[0.26em] text-muted">Personality quiz</p>
+            <h2 className="font-serif text-3xl sm:text-4xl text-anu-navy">Quick, four questions.</h2>
+            <p className="text-sm text-muted max-w-sm mx-auto">
+              Shapes who gets recommended to you. You can skip — but more answers means better matches.
+            </p>
+          </div>
 
-        <div className="flex flex-col gap-3">
-          {question.multiSelect
-            ? question.opts.map((opt) => {
-                const active = draft.freeTimeInterests.includes(opt.value as FreeTime);
-                return (
-                  <button
-                    key={opt.value}
-                    onClick={() => toggleInterest(opt.value as FreeTime)}
-                    className={cx(
-                      "w-full rounded-[22px] border px-4 py-4 text-left text-[15px] transition-all",
-                      active
-                        ? "border-terra bg-terra text-white shadow-sm"
-                        : "border-[#E0D8CC] bg-anu-cream/70 text-anu-navy hover:border-terra hover:bg-white"
-                    )}
-                  >
-                    {opt.label}
-                  </button>
-                );
-              })
-            : question.opts.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => selectSingle(opt.value)}
-                  className={cx(
-                    "w-full rounded-[22px] border px-4 py-4 text-left text-[15px] transition-all",
-                    chosen === opt.value
-                      ? "border-terra bg-terra text-white shadow-sm"
-                      : "border-[#E0D8CC] bg-anu-cream/70 text-anu-navy hover:border-terra hover:bg-white"
+          <div className="max-w-2xl mx-auto">
+            <div className="rounded-3xl border border-[#E0D8CC] bg-white/80 backdrop-blur-sm shadow-[0_8px_40px_rgba(28,35,64,0.07)] overflow-hidden">
+
+              {/* Progress bar */}
+              <div className="h-1 bg-[#EFE7DC]">
+                <div
+                  className="h-full bg-terra transition-all duration-400"
+                  style={{ width: `${((index + 1) / QUIZ.length) * 100}%` }}
+                />
+              </div>
+
+              <div className="p-6 sm:p-8 space-y-6">
+                {/* Question header */}
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.26em] text-muted mb-1">
+                      {question.eyebrow} · {index + 1} / {QUIZ.length}
+                    </p>
+                    <h3 className="font-serif text-2xl sm:text-[1.75rem] leading-tight text-anu-navy">
+                      {question.q}
+                    </h3>
+                    <p className="mt-1 text-sm text-muted">{question.helper}</p>
+                  </div>
+                </div>
+
+                {/* Options */}
+                <div className="grid gap-3">
+                  {question.multiSelect
+                    ? question.opts.map((opt) => {
+                        const active = draft.freeTimeInterests.includes(opt.value as FreeTime);
+                        return (
+                          <button
+                            key={opt.value}
+                            onClick={() => toggleInterest(opt.value as FreeTime)}
+                            className={cx(
+                              "w-full rounded-2xl border px-5 py-3.5 text-left text-[15px] transition-all duration-150",
+                              active
+                                ? "border-terra bg-terra text-white shadow-sm"
+                                : "border-[#E0D8CC] bg-anu-cream/60 text-anu-navy hover:border-terra hover:bg-white"
+                            )}
+                          >
+                            {opt.label}
+                          </button>
+                        );
+                      })
+                    : question.opts.map((opt) => (
+                        <button
+                          key={opt.value}
+                          onClick={() => selectSingle(opt.value)}
+                          className={cx(
+                            "w-full rounded-2xl border px-5 py-3.5 text-left text-[15px] transition-all duration-150",
+                            chosen === opt.value
+                              ? "border-terra bg-terra text-white shadow-sm"
+                              : "border-[#E0D8CC] bg-anu-cream/60 text-anu-navy hover:border-terra hover:bg-white"
+                          )}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                </div>
+
+                {/* Your vibe so far + action row */}
+                <div className="space-y-4 pt-1">
+                  {answersSoFar.length > 0 && (
+                    <div className="rounded-2xl border border-dashed border-[#DDD2C6] bg-anu-cream/50 px-4 py-3 space-y-2">
+                      <p className="text-[9px] uppercase tracking-[0.26em] text-muted">Your vibe so far</p>
+                      <div className="flex flex-wrap gap-2">
+                        {answersSoFar.map((chip) => (
+                          <span
+                            key={chip.label}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-[#DDD2C6] bg-white px-3 py-1 text-xs text-anu-navy"
+                          >
+                            <span className="text-muted uppercase text-[9px] tracking-wide">{chip.label}</span>
+                            {chip.value}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   )}
-                >
-                  {opt.label}
-                </button>
-              ))}
-        </div>
 
-        <div className="space-y-3 rounded-[24px] border border-dashed border-[#DDD2C6] bg-anu-cream/60 p-4">
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-[10px] uppercase tracking-[0.22em] text-muted">Your vibe so far</p>
-            <p className="text-[11px] text-muted">Saved locally</p>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-xs text-muted">Stored on your device until onboarding.</p>
+                    <button
+                      onClick={nextOrFinish}
+                      disabled={question.multiSelect && !draft.freeTimeInterests.length && isLast}
+                      className={cx(
+                        "inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition",
+                        done
+                          ? "bg-sage text-white"
+                          : "bg-terra text-white shadow-[0_2px_12px_rgba(196,113,74,0.3)] hover:opacity-90 disabled:opacity-40"
+                      )}
+                    >
+                      {isLast ? "Start onboarding" : "Next"} <ArrowRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {summary.length > 0 ? (
-              summary.map((item) => (
-                <span
-                  key={item.label}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#DDD2C6] bg-white px-3 py-1.5 text-xs text-anu-navy"
-                >
-                  <span className="text-muted uppercase tracking-wide text-[9px]">{item.label}</span>
-                  {item.value}
-                </span>
-              ))
-            ) : (
-              <span className="text-sm text-muted">Pick a few answers and we’ll build your profile from there.</span>
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-xs text-muted">
-            Personality answers stay on your device until you finish onboarding.
-          </p>
-          <button
-            onClick={nextOrFinish}
-            disabled={!draft.freeTimeInterests.length && isLast}
-            className={cx(
-              "inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition",
-              donePulse
-                ? "bg-sage text-white"
-                : "bg-terra text-white hover:opacity-90 disabled:opacity-40"
-            )}
-          >
-            {isLast ? "Start onboarding" : "Next"} <ArrowRight size={14} />
-          </button>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
-    <div className="rounded-2xl border border-white/12 bg-white/10 px-3 py-3 backdrop-blur-sm">
-      <div className="text-[10px] uppercase tracking-[0.22em] text-white/55">{label}</div>
-      <div className="mt-1 text-sm font-medium text-white">{value}</div>
+    <div className="flex items-center gap-2 text-anu-navy/70">
+      <span className="text-terra">{icon}</span>
+      <span className="font-medium text-anu-navy">{value}</span>
+      <span className="text-sm">{label}</span>
     </div>
   );
 }
 
-function Badge({ children }: { children: React.ReactNode }) {
-  return <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">{children}</span>;
+function FloatCard({ accent, title, body }: { accent: string; title: string; body: string }) {
+  return (
+    <div className="rounded-2xl border border-[#E0D8CC] bg-white/75 backdrop-blur-sm p-4 shadow-[0_4px_20px_rgba(28,35,64,0.06)]">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ background: accent }} />
+        <p className="text-[13px] font-medium text-anu-navy">{title}</p>
+      </div>
+      <p className="text-xs text-muted leading-5">{body}</p>
+    </div>
+  );
+}
+
+function HowCard({
+  step,
+  title,
+  body,
+  bg,
+  accent,
+}: {
+  step: string;
+  title: string;
+  body: string;
+  bg: string;
+  accent: string;
+}) {
+  return (
+    <div className={cx("rounded-3xl p-6 space-y-3", bg)}>
+      <p className={cx("font-mono text-3xl font-bold leading-none", accent)}>{step}</p>
+      <h3 className="font-serif text-xl text-anu-navy">{title}</h3>
+      <p className="text-sm text-anu-navy/65 leading-6">{body}</p>
+    </div>
+  );
 }
