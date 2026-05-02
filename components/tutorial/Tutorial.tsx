@@ -14,7 +14,7 @@ const STEPS: Step[] = [
   {
     title: "Welcome to Class Matching!",
     content:
-      "This tutorial will guide you through matching your sessions with other students. Let's get started!",
+      "This tutorial will guide you through changing your class sessions. Let's get started!",
   },
   {
     title: "Your Timetable",
