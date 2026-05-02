@@ -9,6 +9,7 @@ import { rankMatches } from "@/lib/matching";
 import { peersInSession } from "@/lib/timetable";
 import { DraggableGrid } from "@/components/timetable/DraggableGrid";
 import { useToast } from "@/components/ui/Toast";
+import { Tutorial } from "@/components/tutorial/Tutorial";
 import {
   FREE_TIME_OPTIONS,
   sessionTypeLabel,
@@ -46,18 +47,30 @@ function ProfileInner() {
   const studentById = useStore((s) => s.studentById);
   const sessionsForUser = useStore((s) => s.sessionsForUser);
   const updateMyProfile = useStore((s) => s.updateMyProfile);
+  const hasSeenTutorial = useStore((s) => s.hasSeenTutorial);
+  const setHasSeenTutorial = useStore((s) => s.setHasSeenTutorial);
 
   const toast = useToast();
   const [showEdit, setShowEdit] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   useEffect(() => {
     if (hydrated && !me) router.replace("/onboarding");
   }, [hydrated, me, router]);
 
+  useEffect(() => {
+    if (hydrated && me && !hasSeenTutorial) {
+      setShowTutorial(true);
+    }
+  }, [hydrated, me, hasSeenTutorial]);
+
   // Pre-compute matches so we can highlight peers' presence in drop zones.
   const matches = useMemo(
-    () => (me ? rankMatches(me, allStudents, allUserSessions, allSessions, courses) : []),
-    [me, allStudents, allUserSessions, allSessions, courses]
+    () =>
+      me
+        ? rankMatches(me, allStudents, allUserSessions, allSessions, courses)
+        : [],
+    [me, allStudents, allUserSessions, allSessions, courses],
   );
   const matchedIds = useMemo(() => matches.map((m) => m.user.id), [matches]);
 
@@ -81,6 +94,11 @@ function ProfileInner() {
     });
   }
 
+  function handleTutorialClose() {
+    setShowTutorial(false);
+    setHasSeenTutorial(true);
+  }
+
   if (!me) return null;
 
   return (
@@ -89,7 +107,8 @@ function ProfileInner() {
         <div>
           <h1 className="font-serif text-2xl text-anu-navy">My timetable</h1>
           <p className="text-sm text-muted mt-1">
-            Drag any class block to swap into another session. Green slots are safe; red clash.
+            Drag any class block to swap into another session. Green slots are
+            safe; red clash.
           </p>
         </div>
         <button
@@ -104,10 +123,14 @@ function ProfileInner() {
         <div className="card px-3 py-2 flex items-center justify-between gap-2 bg-anu-cream/60">
           <div className="text-xs text-anu-navy/80 inline-flex items-center gap-1.5">
             <Users size={14} /> Showing{" "}
-            <Link href={`/student/${peer.id}`} className="font-medium underline">
+            <Link
+              href={`/student/${peer.id}`}
+              className="font-medium underline"
+            >
               {peer.name}
             </Link>
-            's timetable as a translucent overlay so you can drag toward their slots.
+            's timetable as a translucent overlay so you can drag toward their
+            slots.
           </div>
           <Link
             href="/profile"
@@ -128,6 +151,7 @@ function ProfileInner() {
         overlaySessions={overlay}
         onSwap={handleSwap}
         onConflict={handleConflict}
+        className="timetable-grid"
       />
 
       <ProfileSummary user={me} />
@@ -143,6 +167,8 @@ function ProfileInner() {
           }}
         />
       )}
+
+      <Tutorial isOpen={showTutorial} onClose={handleTutorialClose} />
     </div>
   );
 }
@@ -169,16 +195,21 @@ function ProfileSummary({ user }: { user: User }) {
         </div>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm pt-2 border-t border-[#E0D8CC]">
-        <Row label="Student ID" value={<span className="font-mono text-xs">{user.id}</span>} />
+        <Row
+          label="Student ID"
+          value={<span className="font-mono text-xs">{user.id}</span>}
+        />
         <Row label="Age" value={user.ageRange} />
         <Row label="Gender" value={user.gender} />
         <Row label="Study style" value={user.studyStyle} />
         <Row
           label="Interests"
           value={
-            user.freeTimeInterests.length > 0
-              ? user.freeTimeInterests.join(", ")
-              : <span className="text-muted/50">none</span>
+            user.freeTimeInterests.length > 0 ? (
+              user.freeTimeInterests.join(", ")
+            ) : (
+              <span className="text-muted/50">none</span>
+            )
           }
         />
       </div>
@@ -189,7 +220,9 @@ function ProfileSummary({ user }: { user: User }) {
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-wider text-muted mb-0.5">{label}</div>
+      <div className="text-[10px] uppercase tracking-wider text-muted mb-0.5">
+        {label}
+      </div>
       <div className="text-anu-navy text-sm">{value}</div>
     </div>
   );
@@ -218,20 +251,36 @@ function PersonalityBar({ user }: { user: User }) {
   if (!user.productiveTime && !user.partnerPriority) return null;
 
   const chips: { label: string; value: string }[] = [
-    { label: "Studies", value: STUDY_LABELS[user.studyStyle] ?? user.studyStyle },
+    {
+      label: "Studies",
+      value: STUDY_LABELS[user.studyStyle] ?? user.studyStyle,
+    },
   ];
   if (user.productiveTime)
-    chips.push({ label: "Productive", value: PRODUCTIVE_LABELS[user.productiveTime] });
+    chips.push({
+      label: "Productive",
+      value: PRODUCTIVE_LABELS[user.productiveTime],
+    });
   if (user.partnerPriority)
-    chips.push({ label: "Values", value: PRIORITY_LABELS[user.partnerPriority] });
+    chips.push({
+      label: "Values",
+      value: PRIORITY_LABELS[user.partnerPriority],
+    });
 
   return (
     <div className="card p-4 flex items-center gap-3 flex-wrap">
-      <span className="text-[11px] uppercase tracking-wider text-muted font-medium">Personality</span>
+      <span className="text-[11px] uppercase tracking-wider text-muted font-medium">
+        Personality
+      </span>
       <div className="flex gap-2 flex-wrap">
         {chips.map((c) => (
-          <div key={c.label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-anu-cream border border-[#E0D8CC]">
-            <span className="text-[10px] text-muted uppercase tracking-wide">{c.label}</span>
+          <div
+            key={c.label}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-anu-cream border border-[#E0D8CC]"
+          >
+            <span className="text-[10px] text-muted uppercase tracking-wide">
+              {c.label}
+            </span>
             <span className="text-xs text-anu-navy font-medium">{c.value}</span>
           </div>
         ))}
@@ -249,11 +298,15 @@ function EditProfileModal({
   onClose: () => void;
   onSave: (patch: Partial<User>) => void;
 }) {
-  const [interests, setInterests] = useState<FreeTime[]>(user.freeTimeInterests);
+  const [interests, setInterests] = useState<FreeTime[]>(
+    user.freeTimeInterests,
+  );
   const [studyStyle, setStudyStyle] = useState<StudyStyle>(user.studyStyle);
 
   const toggleInterest = (i: FreeTime) =>
-    setInterests((arr) => (arr.includes(i) ? arr.filter((x) => x !== i) : [...arr, i]));
+    setInterests((arr) =>
+      arr.includes(i) ? arr.filter((x) => x !== i) : [...arr, i],
+    );
 
   return (
     <div
@@ -266,12 +319,17 @@ function EditProfileModal({
       >
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-anu-navy">Edit profile</h3>
-          <button onClick={onClose} className="text-anu-navy/40 hover:text-anu-navy">
+          <button
+            onClick={onClose}
+            className="text-anu-navy/40 hover:text-anu-navy"
+          >
             <X size={18} />
           </button>
         </div>
         <div>
-          <div className="text-xs font-medium text-anu-navy/80 mb-1">Free-time interests</div>
+          <div className="text-xs font-medium text-anu-navy/80 mb-1">
+            Free-time interests
+          </div>
           <div className="flex flex-wrap gap-1.5">
             {FREE_TIME_OPTIONS.map((i) => (
               <button
@@ -281,7 +339,7 @@ function EditProfileModal({
                   "px-3 py-1 rounded-full text-xs border",
                   interests.includes(i)
                     ? "bg-terra text-white border-terra"
-                    : "bg-anu-cream text-anu-navy border-[#E0D8CC]"
+                    : "bg-anu-cream text-anu-navy border-[#E0D8CC]",
                 )}
               >
                 {i}
@@ -290,27 +348,32 @@ function EditProfileModal({
           </div>
         </div>
         <div>
-          <div className="text-xs font-medium text-anu-navy/80 mb-1">Study style</div>
+          <div className="text-xs font-medium text-anu-navy/80 mb-1">
+            Study style
+          </div>
           <div className="flex flex-wrap gap-1.5">
-            {(["alone", "small", "large", "no-preference"] as StudyStyle[]).map((s) => (
-              <button
-                key={s}
-                onClick={() => setStudyStyle(s)}
-                className={cx(
-                  "px-3 py-1 rounded-full text-xs border",
-                  studyStyle === s
-                    ? "bg-terra text-white border-terra"
-                    : "bg-anu-cream text-anu-navy border-[#E0D8CC]"
-                )}
-              >
-                {s}
-              </button>
-            ))}
+            {(["alone", "small", "large", "no-preference"] as StudyStyle[]).map(
+              (s) => (
+                <button
+                  key={s}
+                  onClick={() => setStudyStyle(s)}
+                  className={cx(
+                    "px-3 py-1 rounded-full text-xs border",
+                    studyStyle === s
+                      ? "bg-terra text-white border-terra"
+                      : "bg-anu-cream text-anu-navy border-[#E0D8CC]",
+                  )}
+                >
+                  {s}
+                </button>
+              ),
+            )}
           </div>
         </div>
         <p className="text-[11px] text-anu-navy/50">
-          Editing courses & sessions: swap on the grid by dragging. To add or remove a course
-          entirely, redo onboarding from the dev menu (Ctrl+Shift+U → reset).
+          Editing courses & sessions: swap on the grid by dragging. To add or
+          remove a course entirely, redo onboarding from the dev menu
+          (Ctrl+Shift+U → reset).
         </p>
         <div className="flex justify-end">
           <button

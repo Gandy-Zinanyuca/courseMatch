@@ -31,6 +31,7 @@ type PersistedSlice = {
   // Optional time-warp for "free now" demos. null = real time.
   timeWarp: { day: number; minute: number } | null; // 0=Mon..4=Fri
   chatByUserId: Record<StudentId, ChatMessage[]>;
+  hasSeenTutorial: boolean;
 };
 
 type State = PersistedSlice & {
@@ -63,6 +64,7 @@ type State = PersistedSlice & {
   chatForUser: (userId: StudentId) => ChatMessage[];
   appendChatMessage: (userId: StudentId, message: ChatMessage) => void;
   clearChatForUser: (userId: StudentId) => void;
+  setHasSeenTutorial: (b: boolean) => void;
 };
 
 export const useStore = create<State>()(
@@ -74,6 +76,7 @@ export const useStore = create<State>()(
       personalityDraft: null,
       timeWarp: null,
       chatByUserId: {},
+      hasSeenTutorial: false,
       hydrated: false,
       setHydrated: (b) => set({ hydrated: b }),
 
@@ -94,7 +97,10 @@ export const useStore = create<State>()(
         const others = SEED_USER_SESSIONS.filter((u) => u.userId !== meId);
         return [...mine, ...others];
       },
-      studentById: (id) => get().allStudents().find((s) => s.id === id),
+      studentById: (id) =>
+        get()
+          .allStudents()
+          .find((s) => s.id === id),
       sessionById: (id) => get().sessions.find((s) => s.id === id),
       courseByCode: (code) => get().courses.find((c) => c.code === code),
       sessionsForUser: (userId) => {
@@ -109,7 +115,10 @@ export const useStore = create<State>()(
         set({
           currentUserId: user.id,
           myProfile: user,
-          myUserSessions: sessionIds.map((sid) => ({ userId: user.id, sessionId: sid })),
+          myUserSessions: sessionIds.map((sid) => ({
+            userId: user.id,
+            sessionId: sid,
+          })),
         });
       },
       setPersonalityDraft: (draft) => set({ personalityDraft: draft }),
@@ -122,14 +131,21 @@ export const useStore = create<State>()(
       setMyCourses: (sessionIds) => {
         const id = get().currentUserId;
         if (!id) return;
-        set({ myUserSessions: sessionIds.map((sid) => ({ userId: id, sessionId: sid })) });
+        set({
+          myUserSessions: sessionIds.map((sid) => ({
+            userId: id,
+            sessionId: sid,
+          })),
+        });
       },
       swapMySession: (oldSessionId, newSessionId) => {
         const id = get().currentUserId;
         if (!id) return;
         set({
           myUserSessions: get().myUserSessions.map((u) =>
-            u.sessionId === oldSessionId ? { userId: id, sessionId: newSessionId } : u
+            u.sessionId === oldSessionId
+              ? { userId: id, sessionId: newSessionId }
+              : u,
           ),
         });
       },
@@ -150,18 +166,26 @@ export const useStore = create<State>()(
       },
       setCurrentUser: (id) => {
         if (id === null) {
-          set({ currentUserId: null, myProfile: null, myUserSessions: [], chatByUserId: {} });
+          set({
+            currentUserId: null,
+            myProfile: null,
+            myUserSessions: [],
+            chatByUserId: {},
+          });
           return;
         }
         const seed = SEED_STUDENTS.find((s) => s.id === id);
         if (!seed) return;
-        const sessionIds = SEED_USER_SESSIONS.filter((u) => u.userId === id).map(
-          (u) => u.sessionId
-        );
+        const sessionIds = SEED_USER_SESSIONS.filter(
+          (u) => u.userId === id,
+        ).map((u) => u.sessionId);
         set({
           currentUserId: id,
           myProfile: seed,
-          myUserSessions: sessionIds.map((sid) => ({ userId: id, sessionId: sid })),
+          myUserSessions: sessionIds.map((sid) => ({
+            userId: id,
+            sessionId: sid,
+          })),
         });
       },
       resetDemo: () => {
@@ -175,6 +199,7 @@ export const useStore = create<State>()(
         });
       },
       setTimeWarp: (t) => set({ timeWarp: t }),
+      setHasSeenTutorial: (b) => set({ hasSeenTutorial: b }),
     }),
     {
       name: "coursematch-v1",
@@ -186,10 +211,11 @@ export const useStore = create<State>()(
         personalityDraft: s.personalityDraft,
         timeWarp: s.timeWarp,
         chatByUserId: s.chatByUserId,
+        hasSeenTutorial: s.hasSeenTutorial,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated(true);
       },
-    }
-  )
+    },
+  ),
 );

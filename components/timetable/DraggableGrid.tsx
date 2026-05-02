@@ -42,7 +42,12 @@ type Props = {
   /** Optional translucent overlay (e.g. peer's timetable). */
   overlaySessions?: Session[];
   onSwap: (oldSessionId: string, newSessionId: string) => void;
-  onConflict?: (oldSessionId: string, target: Session, clashWith: Session) => void;
+  onConflict?: (
+    oldSessionId: string,
+    target: Session,
+    clashWith: Session,
+  ) => void;
+  className?: string;
 };
 
 export function DraggableGrid({
@@ -52,26 +57,30 @@ export function DraggableGrid({
   overlaySessions = [],
   onSwap,
   onConflict,
+  className,
 }: Props) {
   const [dragId, setDragId] = useState<string | null>(null);
 
   const draggedSession = useMemo(
-    () => (dragId ? allSessions.find((s) => s.id === dragId) ?? null : null),
-    [dragId, allSessions]
+    () => (dragId ? (allSessions.find((s) => s.id === dragId) ?? null) : null),
+    [dragId, allSessions],
   );
   const allAlternatives = useMemo(
-    () => (draggedSession ? alternativeSessionsFor(draggedSession, allSessions) : []),
-    [draggedSession, allSessions]
+    () =>
+      draggedSession ? alternativeSessionsFor(draggedSession, allSessions) : [],
+    [draggedSession, allSessions],
   );
   const validIds = useMemo(() => {
     if (!draggedSession) return new Set<string>();
     return new Set(
-      validDropTargets(draggedSession, myUserSessions, allSessions).map((s) => s.id)
+      validDropTargets(draggedSession, myUserSessions, allSessions).map(
+        (s) => s.id,
+      ),
     );
   }, [draggedSession, myUserSessions, allSessions]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
   );
 
   const mySessions = useMemo(
@@ -79,7 +88,7 @@ export function DraggableGrid({
       myUserSessions
         .map((u) => allSessions.find((s) => s.id === u.sessionId))
         .filter((s): s is Session => !!s),
-    [myUserSessions, allSessions]
+    [myUserSessions, allSessions],
   );
 
   function handleDragStart(e: DragStartEvent) {
@@ -104,7 +113,7 @@ export function DraggableGrid({
       onDragEnd={handleDragEnd}
       onDragCancel={() => setDragId(null)}
     >
-      <div className="card overflow-hidden">
+      <div className={cx("card overflow-hidden timetable-grid", className)}>
         <div className="grid grid-cols-[60px_repeat(5,minmax(0,1fr))] text-xs">
           {/* Header */}
           <div className="border-b border-[#E0D8CC] bg-anu-cream/60" />
@@ -128,7 +137,9 @@ export function DraggableGrid({
                 className="absolute left-0 right-0 text-muted px-1"
                 style={{ top: hour * 2 * ROW_PX, height: 2 * ROW_PX }}
               >
-                <span className="text-[10px]">{String(8 + hour).padStart(2, "0")}:00</span>
+                <span className="text-[10px]">
+                  {String(8 + hour).padStart(2, "0")}:00
+                </span>
               </div>
             ))}
           </div>
@@ -156,7 +167,8 @@ export function DraggableGrid({
               {draggedSession.courseId} {sessionTypeLabel[draggedSession.type]}
             </div>
             <div className="opacity-80">
-              {minToHHMM(draggedSession.startMin)}–{minToHHMM(draggedSession.endMin)}
+              {minToHHMM(draggedSession.startMin)}–
+              {minToHHMM(draggedSession.endMin)}
             </div>
           </div>
         )}
@@ -192,7 +204,7 @@ function DayColumn({
           key={i}
           className={cx(
             "absolute left-0 right-0 border-t",
-            i % 2 === 0 ? "border-[#E0D8CC]" : "border-[#E0D8CC]/50"
+            i % 2 === 0 ? "border-[#E0D8CC]" : "border-[#E0D8CC]/50",
           )}
           style={{ top: i * ROW_PX, height: ROW_PX }}
         />
@@ -208,7 +220,14 @@ function DayColumn({
         alternatives.map((alt) => {
           const valid = validIds.has(alt.id);
           const peers = peersAtSession?.(alt.id) ?? [];
-          return <DropZone key={alt.id} session={alt} valid={valid} peerCount={peers.length} />;
+          return (
+            <DropZone
+              key={alt.id}
+              session={alt}
+              valid={valid}
+              peerCount={peers.length}
+            />
+          );
         })}
 
       {/* My draggable sessions */}
@@ -235,13 +254,15 @@ function DraggableBlock({ session }: { session: Session }) {
       className={cx(
         "absolute left-1 right-1 rounded-md px-2 py-1 text-[11px] leading-tight text-left overflow-hidden z-20",
         "bg-terra text-white border border-terra/40 cursor-grab active:cursor-grabbing select-none",
-        isDragging && "opacity-30"
+        isDragging && "opacity-30",
       )}
       style={{ top, height: Math.max(height - 2, 16) }}
     >
       <div className="font-semibold truncate">
         {session.courseId}{" "}
-        <span className="font-normal opacity-70">{sessionTypeLabel[session.type]}</span>
+        <span className="font-normal opacity-70">
+          {sessionTypeLabel[session.type]}
+        </span>
       </div>
       <div className="opacity-80 truncate">{session.location}</div>
     </button>
@@ -273,7 +294,7 @@ function DropZone({
           ? isOver
             ? "bg-emerald-500/30 border-emerald-600 text-emerald-900"
             : "bg-emerald-100/70 border-emerald-400 text-emerald-800"
-          : "bg-red-100/60 border-red-300 text-red-700"
+          : "bg-red-100/60 border-red-300 text-red-700",
       )}
       style={{ top, height: Math.max(height - 2, 16) }}
       title={
