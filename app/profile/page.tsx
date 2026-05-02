@@ -10,6 +10,7 @@ import { peersInSession } from "@/lib/timetable";
 import { DraggableGrid } from "@/components/timetable/DraggableGrid";
 import { useToast } from "@/components/ui/Toast";
 import { Tutorial } from "@/components/tutorial/Tutorial";
+import { MatchingTutorial } from "@/components/tutorial/MatchingTutorial";
 import {
   FREE_TIME_OPTIONS,
   sessionTypeLabel,
@@ -50,6 +51,10 @@ function ProfileInner() {
   const updateMyProfile = useStore((s) => s.updateMyProfile);
   const hasSeenTutorial = useStore((s) => s.hasSeenTutorial);
   const setHasSeenTutorial = useStore((s) => s.setHasSeenTutorial);
+  const hasSeenMatchingTutorial = useStore((s) => s.hasSeenMatchingTutorial);
+  const setHasSeenMatchingTutorial = useStore(
+    (s) => s.setHasSeenMatchingTutorial,
+  );
   const myGroups = useMemo(
     () => (me ? groupsForUser(me.id) : []),
     [me, groupsForUser],
@@ -58,6 +63,7 @@ function ProfileInner() {
   const toast = useToast();
   const [showEdit, setShowEdit] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showMatchingTutorial, setShowMatchingTutorial] = useState(false);
 
   useEffect(() => {
     if (hydrated && !me) router.replace("/onboarding");
@@ -69,6 +75,14 @@ function ProfileInner() {
     }
   }, [hydrated, me, hasSeenTutorial]);
 
+  const peer = peerParam ? studentById(peerParam as `u${string}`) : null;
+
+  useEffect(() => {
+    if (hydrated && me && peer && !hasSeenMatchingTutorial) {
+      setShowMatchingTutorial(true);
+    }
+  }, [hydrated, me, peer, hasSeenMatchingTutorial]);
+
   // Pre-compute matches so we can highlight peers' presence in drop zones.
   const matches = useMemo(
     () =>
@@ -79,7 +93,6 @@ function ProfileInner() {
   );
   const matchedIds = useMemo(() => matches.map((m) => m.user.id), [matches]);
 
-  const peer = peerParam ? studentById(peerParam as `u${string}`) : null;
   const overlay = peer ? sessionsForUser(peer.id) : [];
 
   const peersAtSession = (sid: string) =>
@@ -102,6 +115,11 @@ function ProfileInner() {
   function handleTutorialClose() {
     setShowTutorial(false);
     setHasSeenTutorial(true);
+  }
+
+  function handleMatchingTutorialClose() {
+    setShowMatchingTutorial(false);
+    setHasSeenMatchingTutorial(true);
   }
 
   if (!me) return null;
@@ -227,6 +245,10 @@ function ProfileInner() {
       )}
 
       <Tutorial isOpen={showTutorial} onClose={handleTutorialClose} />
+      <MatchingTutorial
+        isOpen={showMatchingTutorial}
+        onClose={handleMatchingTutorialClose}
+      />
     </div>
   );
 }

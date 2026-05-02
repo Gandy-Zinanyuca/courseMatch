@@ -72,6 +72,7 @@ type PersistedSlice = {
   chatByUserId: Record<StudentId, ChatMessage[]>;
   studyGroups: StudyGroup[];
   hasSeenTutorial: boolean;
+  hasSeenMatchingTutorial: boolean;
 };
 
 type State = PersistedSlice & {
@@ -118,6 +119,7 @@ type State = PersistedSlice & {
   leaveStudyGroup: (groupId: string) => void;
   appendGroupChatMessage: (groupId: string, message: ChatMessage) => void;
   setHasSeenTutorial: (b: boolean) => void;
+  setHasSeenMatchingTutorial: (b: boolean) => void;
 };
 
 export const useStore = create<State>()(
@@ -133,6 +135,7 @@ export const useStore = create<State>()(
       chatByUserId: {},
       studyGroups: SEED_STUDY_GROUPS,
       hasSeenTutorial: false,
+      hasSeenMatchingTutorial: false,
       hydrated: false,
       setHydrated: (b) => set({ hydrated: b }),
 
@@ -158,9 +161,7 @@ export const useStore = create<State>()(
       allUserSessions: () => {
         const sessionsById = get().userSessionsById;
         const savedEntries = Object.entries(sessionsById).filter(
-          (
-            entry,
-          ): entry is [StudentId, UserSession[]] =>
+          (entry): entry is [StudentId, UserSession[]] =>
             Boolean(entry[0]) && Array.isArray(entry[1]),
         );
         const result: UserSession[] = [];
@@ -409,6 +410,7 @@ export const useStore = create<State>()(
       },
       setTimeWarp: (t) => set({ timeWarp: t }),
       setHasSeenTutorial: (b) => set({ hasSeenTutorial: b }),
+      setHasSeenMatchingTutorial: (b) => set({ hasSeenMatchingTutorial: b }),
     }),
     {
       name: "coursematch-v1",
@@ -424,6 +426,7 @@ export const useStore = create<State>()(
         chatByUserId: s.chatByUserId,
         studyGroups: s.studyGroups,
         hasSeenTutorial: s.hasSeenTutorial,
+        hasSeenMatchingTutorial: s.hasSeenMatchingTutorial,
       }),
       onRehydrateStorage: () => (state) => {
         if (!state) return;
@@ -440,7 +443,9 @@ export const useStore = create<State>()(
           };
         }
         state.studyGroups = state.studyGroups.map((group) => {
-          const ownerName = state.allStudents().find((student) => student.id === group.ownerId)?.name;
+          const ownerName = state
+            .allStudents()
+            .find((student) => student.id === group.ownerId)?.name;
           return {
             ...group,
             chat: group.chat.map((message) => ({
@@ -448,7 +453,7 @@ export const useStore = create<State>()(
               authorId:
                 message.authorId ??
                 (message.sender === "me"
-                  ? state.currentUserId ?? undefined
+                  ? (state.currentUserId ?? undefined)
                   : group.ownerId),
               authorName:
                 message.authorName ??
