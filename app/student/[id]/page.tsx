@@ -11,6 +11,7 @@ import { WeekGrid } from "@/components/timetable/WeekGrid";
 import { sessionTypeLabel, type StudentId, type PartnerPriority, type ProductiveTime } from "@/lib/types";
 import { useState } from "react";
 import { MessageModal } from "@/components/student/MessageModal";
+import { mockAvatarUrl } from "@/lib/avatar";
 
 export default function StudentPage() {
   const params = useParams();
@@ -64,10 +65,19 @@ export default function StudentPage() {
 
       <div className="card p-5 grid sm:grid-cols-3 gap-4">
         <div className="sm:col-span-2 space-y-2">
-          <h1 className="font-serif text-2xl text-anu-navy">{student.name}</h1>
-          <div className="text-sm text-anu-navy/70">
-            <span className="font-mono">{student.id}</span> · {student.degree} · Year{" "}
-            {student.year}
+          <div className="flex items-start gap-3">
+            <img
+              src={mockAvatarUrl(student.id, student.name)}
+              alt={`${student.name} avatar`}
+              className="w-14 h-14 rounded-full border border-[#E0D8CC] bg-anu-cream"
+            />
+            <div>
+              <h1 className="font-serif text-2xl text-anu-navy">{student.name}</h1>
+              <div className="text-sm text-anu-navy/70 mt-0.5">
+                <span className="font-mono">{student.id}</span> · {student.degree} · Year{" "}
+                {student.year}
+              </div>
+            </div>
           </div>
           <div className="text-xs text-muted">
             {student.gender} · {student.ageRange}

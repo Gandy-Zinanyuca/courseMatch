@@ -216,12 +216,6 @@ export default function IntroPage() {
               >
                 Take the quiz <ArrowRight size={15} />
               </button>
-              <a
-                href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-full border border-[#D8CCBE] bg-white/70 px-7 py-3.5 text-sm font-medium text-anu-navy hover:bg-white transition backdrop-blur-sm"
-              >
-                Skip quiz →
-              </a>
             </div>
 
             {/* Stats row */}
