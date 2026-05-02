@@ -81,7 +81,6 @@ export function StudentCard({
           </div>
           <div className="text-right">
             <div className="text-[11px] font-semibold text-anu-navy">{compatibility}% match</div>
-            <div className="text-[10px] text-muted">Reply chance {replyChance}%</div>
           </div>
         </div>
 
@@ -133,8 +132,7 @@ export function StudentCard({
             </div>
           )}
           <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-terra" />
-            Similar vibe score {Math.min(99, score)}
+
           </div>
         </div>
 
