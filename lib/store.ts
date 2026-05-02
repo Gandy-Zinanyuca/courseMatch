@@ -22,6 +22,15 @@ const SEED_COURSES = coursesJson as Course[];
 const SEED_SESSIONS = sessionsJson as Session[];
 const SEED_STUDENTS = studentsJson as User[];
 const SEED_USER_SESSIONS = userSessionsJson as UserSession[];
+const SEED_STUDENT_IDS = new Set(SEED_STUDENTS.map((student) => student.id));
+
+function getSeedProfileById(id: StudentId) {
+  return SEED_STUDENTS.find((student) => student.id === id);
+}
+
+function getSeedSessionsByUserId(userId: StudentId) {
+  return SEED_USER_SESSIONS.filter((session) => session.userId === userId);
+}
 const SEED_STUDY_GROUPS: StudyGroup[] = [
   {
     id: "g1",
@@ -34,15 +43,17 @@ const SEED_STUDY_GROUPS: StudyGroup[] = [
     chat: [
       {
         id: "c1",
-        sender: "them",
         text: "Anyone free to swap into Thursday tutorial?",
         at: Date.now() - 1000 * 60 * 45,
+        authorId: SEED_STUDENTS[0].id,
+        authorName: SEED_STUDENTS[0].name,
       },
       {
         id: "c2",
-        sender: "me",
         text: "I can join if someone moves into the 10am session.",
         at: Date.now() - 1000 * 60 * 20,
+        authorId: SEED_STUDENTS[1].id,
+        authorName: SEED_STUDENTS[1].name,
       },
     ],
   },
@@ -53,6 +64,8 @@ type PersistedSlice = {
   // Mutable layer over seed data — represents YOU plus any swaps you've made.
   myProfile: User | null;
   myUserSessions: UserSession[]; // your sessionIds (only)
+  profilesById: Partial<Record<StudentId, User>>;
+  userSessionsById: Partial<Record<StudentId, UserSession[]>>;
   personalityDraft: PersonalityQuizDraft | null;
   // Optional time-warp for "free now" demos. null = real time.
   timeWarp: { day: number; minute: number } | null; // 0=Mon..4=Fri
@@ -113,6 +126,8 @@ export const useStore = create<State>()(
       currentUserId: null,
       myProfile: null,
       myUserSessions: [],
+      profilesById: {},
+      userSessionsById: {},
       personalityDraft: null,
       timeWarp: null,
       chatByUserId: {},
@@ -125,18 +140,52 @@ export const useStore = create<State>()(
       sessions: SEED_SESSIONS,
 
       allStudents: () => {
-        const me = get().myProfile;
-        if (!me) return SEED_STUDENTS;
-        // Replace if collision (dev switcher), else append.
-        const others = SEED_STUDENTS.filter((s) => s.id !== me.id);
-        return [me, ...others];
+        const profilesById = get().profilesById;
+        const customProfiles = Object.values(profilesById).filter(
+          (profile): profile is User => Boolean(profile),
+        );
+        const customById = new Map(
+          customProfiles.map((profile) => [profile.id, profile]),
+        );
+        const mergedSeeds = SEED_STUDENTS.map(
+          (seed) => customById.get(seed.id) ?? seed,
+        );
+        const customOnly = customProfiles.filter(
+          (profile) => !SEED_STUDENT_IDS.has(profile.id),
+        );
+        return [...mergedSeeds, ...customOnly];
       },
       allUserSessions: () => {
-        const meId = get().currentUserId;
-        const mine = get().myUserSessions;
-        if (!meId) return SEED_USER_SESSIONS;
-        const others = SEED_USER_SESSIONS.filter((u) => u.userId !== meId);
-        return [...mine, ...others];
+        const sessionsById = get().userSessionsById;
+        const savedEntries = Object.entries(sessionsById).filter(
+          (
+            entry,
+          ): entry is [StudentId, UserSession[]] =>
+            Boolean(entry[0]) && Array.isArray(entry[1]),
+        );
+        const result: UserSession[] = [];
+        const seen = new Set<string>();
+        const pushSessions = (sessions: UserSession[]) => {
+          sessions.forEach((session) => {
+            const key = `${session.userId}:${session.sessionId}`;
+            if (seen.has(key)) return;
+            seen.add(key);
+            result.push(session);
+          });
+        };
+
+        SEED_STUDENTS.forEach((student) => {
+          pushSessions(
+            sessionsById[student.id] ?? getSeedSessionsByUserId(student.id),
+          );
+        });
+
+        savedEntries.forEach(([userId, sessions]) => {
+          if (SEED_STUDENT_IDS.has(userId)) return;
+          pushSessions(sessions);
+        });
+
+        return result;
       },
       studentById: (id) =>
         get()
@@ -162,13 +211,22 @@ export const useStore = create<State>()(
         get().studyGroups.find((group) => group.id === groupId),
 
       completeOnboarding: (user, sessionIds) => {
+        const myUserSessions = sessionIds.map((sid) => ({
+          userId: user.id,
+          sessionId: sid,
+        }));
         set({
           currentUserId: user.id,
           myProfile: user,
-          myUserSessions: sessionIds.map((sid) => ({
-            userId: user.id,
-            sessionId: sid,
-          })),
+          myUserSessions,
+          profilesById: {
+            ...get().profilesById,
+            [user.id]: user,
+          },
+          userSessionsById: {
+            ...get().userSessionsById,
+            [user.id]: myUserSessions,
+          },
         });
       },
       setPersonalityDraft: (draft) => set({ personalityDraft: draft }),
@@ -176,27 +234,44 @@ export const useStore = create<State>()(
       updateMyProfile: (patch) => {
         const cur = get().myProfile;
         if (!cur) return;
-        set({ myProfile: { ...cur, ...patch } });
+        const next = { ...cur, ...patch };
+        set({
+          myProfile: next,
+          profilesById: {
+            ...get().profilesById,
+            [cur.id]: next,
+          },
+        });
       },
       setMyCourses: (sessionIds) => {
         const id = get().currentUserId;
         if (!id) return;
+        const myUserSessions = sessionIds.map((sid) => ({
+          userId: id,
+          sessionId: sid,
+        }));
         set({
-          myUserSessions: sessionIds.map((sid) => ({
-            userId: id,
-            sessionId: sid,
-          })),
+          myUserSessions,
+          userSessionsById: {
+            ...get().userSessionsById,
+            [id]: myUserSessions,
+          },
         });
       },
       swapMySession: (oldSessionId, newSessionId) => {
         const id = get().currentUserId;
         if (!id) return;
+        const myUserSessions = get().myUserSessions.map((u) =>
+          u.sessionId === oldSessionId
+            ? { userId: id, sessionId: newSessionId }
+            : u,
+        );
         set({
-          myUserSessions: get().myUserSessions.map((u) =>
-            u.sessionId === oldSessionId
-              ? { userId: id, sessionId: newSessionId }
-              : u,
-          ),
+          myUserSessions,
+          userSessionsById: {
+            ...get().userSessionsById,
+            [id]: myUserSessions,
+          },
         });
       },
       chatForUser: (userId) => get().chatByUserId[userId] ?? [],
@@ -220,22 +295,17 @@ export const useStore = create<State>()(
             currentUserId: null,
             myProfile: null,
             myUserSessions: [],
-            chatByUserId: {},
           });
           return;
         }
-        const seed = SEED_STUDENTS.find((s) => s.id === id);
-        if (!seed) return;
-        const sessionIds = SEED_USER_SESSIONS.filter(
-          (u) => u.userId === id,
-        ).map((u) => u.sessionId);
+        const profile = get().profilesById[id] ?? getSeedProfileById(id);
+        if (!profile) return;
+        const sessions =
+          get().userSessionsById[id] ?? getSeedSessionsByUserId(id);
         set({
           currentUserId: id,
-          myProfile: seed,
-          myUserSessions: sessionIds.map((sid) => ({
-            userId: id,
-            sessionId: sid,
-          })),
+          myProfile: profile,
+          myUserSessions: sessions,
         });
       },
       resetDemo: () => {
@@ -243,6 +313,8 @@ export const useStore = create<State>()(
           currentUserId: null,
           myProfile: null,
           myUserSessions: [],
+          profilesById: {},
+          userSessionsById: {},
           personalityDraft: null,
           timeWarp: null,
           chatByUserId: {},
@@ -345,6 +417,8 @@ export const useStore = create<State>()(
         currentUserId: s.currentUserId,
         myProfile: s.myProfile,
         myUserSessions: s.myUserSessions,
+        profilesById: s.profilesById,
+        userSessionsById: s.userSessionsById,
         personalityDraft: s.personalityDraft,
         timeWarp: s.timeWarp,
         chatByUserId: s.chatByUserId,
@@ -352,6 +426,36 @@ export const useStore = create<State>()(
         hasSeenTutorial: s.hasSeenTutorial,
       }),
       onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        if (state.myProfile) {
+          state.profilesById = {
+            ...state.profilesById,
+            [state.myProfile.id]: state.myProfile,
+          };
+        }
+        if (state.currentUserId && state.myUserSessions.length > 0) {
+          state.userSessionsById = {
+            ...state.userSessionsById,
+            [state.currentUserId]: state.myUserSessions,
+          };
+        }
+        state.studyGroups = state.studyGroups.map((group) => {
+          const ownerName = state.allStudents().find((student) => student.id === group.ownerId)?.name;
+          return {
+            ...group,
+            chat: group.chat.map((message) => ({
+              ...message,
+              authorId:
+                message.authorId ??
+                (message.sender === "me"
+                  ? state.currentUserId ?? undefined
+                  : group.ownerId),
+              authorName:
+                message.authorName ??
+                (message.sender === "me" ? state.myProfile?.name : ownerName),
+            })),
+          };
+        });
         state?.setHydrated(true);
       },
     },

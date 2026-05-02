@@ -99,9 +99,11 @@ export type ChatSender = "me" | "them";
 
 export type ChatMessage = {
   id: string;
-  sender: ChatSender;
   text: string;
   at: number;
+  authorId?: StudentId;
+  authorName?: string;
+  sender?: ChatSender;
 };
 
 // Bounds for the timetable grid (in minutes from midnight).

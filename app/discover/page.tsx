@@ -77,9 +77,8 @@ export default function DiscoverPage() {
       </section>
 
       <section className="grid sm:grid-cols-3 gap-3">
-        <SignalCard label="High-confidence picks" value={recommendationSignals.same} hint="same session overlap" tone="terra" />
-        <SignalCard label="Flexible swap options" value={recommendationSignals.swap} hint="different session, same course" tone="sage" />
-        <SignalCard label="Likely responders" value={recommendationSignals.highIntent} hint="reply chance above 80%" tone="navy" />
+        <SignalCard label="People in your classes" value={recommendationSignals.same} hint="same session overlap" tone="terra" />
+        <SignalCard label="People to match classes with" value={recommendationSignals.swap} hint="different session, same course" tone="sage" />
       </section>
 
       {filtered.length === 0 ? (
@@ -136,7 +135,7 @@ function SignalCard({
   };
   return (
     <div className={cx("rounded-2xl border border-[#E0D8CC] p-4 bg-gradient-to-br", toneMap[tone])}>
-      <div className="text-[10px] uppercase tracking-[0.15em] text-muted">Signal</div>
+      <div className="text-[10px] uppercase tracking-[0.15em] text-muted">Overview</div>
       <div className="mt-1 text-2xl font-serif">{value}</div>
       <div className="text-sm font-medium text-anu-navy mt-1">{label}</div>
       <div className="text-xs text-muted mt-0.5">{hint}</div>

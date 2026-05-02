@@ -12,9 +12,9 @@ type Step = {
 
 const STEPS: Step[] = [
   {
-    title: "Welcome to Course Swapping!",
+    title: "Welcome to Class Matching!",
     content:
-      "This tutorial will guide you through swapping courses with other students. Let's get started!",
+      "This tutorial will guide you through matching your sessions with other students. Let's get started!",
   },
   {
     title: "Your Timetable",
