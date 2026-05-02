@@ -16,6 +16,8 @@ function userBlurbProfile(u: User): string {
   return [
     `Year ${u.year}`,
     u.studyStyle === "no-preference" ? "no study style preference" : `prefers ${u.studyStyle} study`,
+    u.productiveTime ? `${u.productiveTime} person` : "",
+    u.partnerPriority ? `values ${u.partnerPriority}` : "",
     u.freeTimeInterests.length ? `enjoys ${u.freeTimeInterests.join(", ")}` : "",
   ]
     .filter(Boolean)
@@ -27,6 +29,8 @@ export async function blurbForPair(a: User, b: User): Promise<string> {
   if (!c) {
     // Deterministic fallback so the UI still works without an API key.
     const overlap = a.freeTimeInterests.filter((i) => b.freeTimeInterests.includes(i));
+    if (a.partnerPriority && b.partnerPriority && a.partnerPriority === b.partnerPriority)
+      return `Both care about ${a.partnerPriority}`;
     if (overlap.length) return `Both into ${overlap.slice(0, 2).join(" and ")}`;
     if (a.studyStyle === b.studyStyle && a.studyStyle !== "no-preference")
       return `Same study style — ${a.studyStyle} groups`;
@@ -34,7 +38,7 @@ export async function blurbForPair(a: User, b: User): Promise<string> {
   }
 
   const sys =
-    "You write a single short phrase (8-12 words, no period at end) describing what two university students have in common, based on their study style and interests. No emojis, no names, no quotes. Just the phrase.";
+    "You write a single short phrase (8-12 words, no period at end) describing what two university students have in common, based on their study style, energy, priorities, and interests. No emojis, no names, no quotes. Just the phrase.";
   const usr = `Student A: ${userBlurbProfile(a)}.
 Student B: ${userBlurbProfile(b)}.
 

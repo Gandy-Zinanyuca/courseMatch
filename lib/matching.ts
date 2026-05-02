@@ -11,22 +11,40 @@ import type {
 
 const SCORE_SAME_SESSION = 100;
 const SCORE_SWAPPABLE = 25;
-const SCORE_QUIZ_MATCH = 5;
-const SCORE_INTEREST_OVERLAP = 3;
+const SCORE_STUDY_STYLE_MATCH = 14;
+const SCORE_PRODUCTIVE_TIME_MATCH = 10;
+const SCORE_PARTNER_PRIORITY_MATCH = 12;
+const SCORE_INTEREST_OVERLAP = 4;
+const SCORE_SHARED_YEAR = 2;
+const SCORE_SHARED_AGE = 1;
 
-function quizSimilarity(a: User, b: User): number {
+function personalitySimilarity(a: User, b: User): number {
   let score = 0;
-  if (a.year === b.year) score += SCORE_QUIZ_MATCH;
-  if (a.ageRange === b.ageRange) score += SCORE_QUIZ_MATCH;
-  if (a.studyStyle === b.studyStyle) score += SCORE_QUIZ_MATCH;
+  if (a.studyStyle === b.studyStyle) {
+    score += SCORE_STUDY_STYLE_MATCH;
+  } else if (a.studyStyle === "no-preference" || b.studyStyle === "no-preference") {
+    score += 4;
+  }
   if (a.productiveTime && b.productiveTime && a.productiveTime === b.productiveTime)
-    score += SCORE_QUIZ_MATCH;
+    score += SCORE_PRODUCTIVE_TIME_MATCH;
   if (a.partnerPriority && b.partnerPriority && a.partnerPriority === b.partnerPriority)
-    score += SCORE_QUIZ_MATCH;
+    score += SCORE_PARTNER_PRIORITY_MATCH;
   const interestOverlap = a.freeTimeInterests.filter((i) =>
     b.freeTimeInterests.includes(i)
   ).length;
   score += interestOverlap * SCORE_INTEREST_OVERLAP;
+  if (a.year === b.year) score += SCORE_SHARED_YEAR;
+  if (a.ageRange === b.ageRange) score += SCORE_SHARED_AGE;
+
+  if (a.partnerPriority === "personality" || b.partnerPriority === "personality") {
+    score += Math.min(interestOverlap, 2) * 2;
+    if (a.studyStyle === b.studyStyle && a.studyStyle !== "no-preference") score += 4;
+    if (a.productiveTime && b.productiveTime && a.productiveTime === b.productiveTime) score += 3;
+  }
+
+  if (a.partnerPriority === "everything" || b.partnerPriority === "everything") {
+    score += Math.min(interestOverlap, 2);
+  }
   return score;
 }
 
@@ -117,7 +135,7 @@ export function rankMatches(
       courses
     );
     if (shared.length === 0) continue; // no shared courses -> not in feed
-    const score = sessionScore + quizSimilarity(me, s);
+    const score = sessionScore + personalitySimilarity(me, s);
     matches.push({ user: s, shared, score });
   }
   matches.sort((a, b) => b.score - a.score);

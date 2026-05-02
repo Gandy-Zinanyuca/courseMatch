@@ -12,6 +12,12 @@ export type AgeRange = "18-19" | "20-22" | "23+";
 export type StudyStyle = "alone" | "small" | "large" | "no-preference";
 export type ProductiveTime = "morning" | "afternoon" | "night" | "flexible";
 export type PartnerPriority = "courses" | "goals" | "personality" | "everything";
+export type PersonalityQuizDraft = {
+  studyStyle: StudyStyle | null;
+  productiveTime: ProductiveTime | null;
+  partnerPriority: PartnerPriority | null;
+  freeTimeInterests: FreeTime[];
+};
 
 export const FREE_TIME_OPTIONS = [
   "gym",

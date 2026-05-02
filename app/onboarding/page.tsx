@@ -18,7 +18,6 @@ import {
 } from "@/lib/types";
 import { CourseSessionPicker } from "@/components/onboarding/CourseSessionPicker";
 import { WeekGrid } from "@/components/timetable/WeekGrid";
-import { ChevronLeft } from "lucide-react";
 import { cx } from "@/lib/cx";
 
 type Draft = {
@@ -129,20 +128,27 @@ export default function OnboardingPage() {
   const courses = useStore((s) => s.courses);
   const hydrated = useStore((s) => s.hydrated);
   const currentUserId = useStore((s) => s.currentUserId);
+  const personalityDraft = useStore((s) => s.personalityDraft);
 
-  const [step, setStep] = useState<1 | 2>(1);
   const [draft, setDraft] = useState<Draft>(EMPTY_DRAFT);
   const [sessionIds, setSessionIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (hydrated && currentUserId) router.replace("/profile");
-  }, [hydrated, currentUserId, router]);
+    if (hydrated && !currentUserId && !personalityDraft) router.replace("/intro");
+  }, [hydrated, currentUserId, personalityDraft, router]);
 
   const idValid = STUDENT_ID_RE.test(draft.id);
   const step1Ready =
     idValid && draft.name.trim() && draft.degree.trim() && sessionIds.length > 0;
 
   function finish() {
+    const personality = personalityDraft ?? {
+      studyStyle: null,
+      productiveTime: null,
+      partnerPriority: null,
+      freeTimeInterests: [],
+    };
     const user: User = {
       id: draft.id as StudentId,
       name: draft.name.trim(),
@@ -150,10 +156,10 @@ export default function OnboardingPage() {
       year: (draft.year ?? 1) as Year,
       ageRange: (draft.ageRange ?? "18-19") as AgeRange,
       gender: draft.gender || "prefer not to say",
-      freeTimeInterests: draft.freeTimeInterests,
-      studyStyle: (draft.studyStyle ?? "no-preference") as StudyStyle,
-      productiveTime: draft.productiveTime ?? undefined,
-      partnerPriority: draft.partnerPriority ?? undefined,
+      freeTimeInterests: personality.freeTimeInterests,
+      studyStyle: (personality.studyStyle ?? "no-preference") as StudyStyle,
+      productiveTime: personality.productiveTime ?? undefined,
+      partnerPriority: personality.partnerPriority ?? undefined,
     };
     completeOnboarding(user, sessionIds);
     router.replace("/discover");
@@ -161,43 +167,31 @@ export default function OnboardingPage() {
 
   return (
     <div className="space-y-6">
-      <ProgressBar step={step} />
+      <ProgressBar step={1} />
 
-      {step === 1 && (
-        <Step1
-          draft={draft}
-          setDraft={setDraft}
-          idValid={idValid}
-          sessions={sessions}
-          courses={courses}
-          sessionIds={sessionIds}
-          setSessionIds={setSessionIds}
-        />
-      )}
+      {personalityDraft && <PersonalityRecap draft={personalityDraft} />}
 
-      {step === 2 && (
-        <QuizStep draft={draft} setDraft={setDraft} onDone={finish} />
-      )}
+      <Step1
+        draft={draft}
+        setDraft={setDraft}
+        idValid={idValid}
+        sessions={sessions}
+        courses={courses}
+        sessionIds={sessionIds}
+        setSessionIds={setSessionIds}
+      />
 
-      {/* Footer nav — only show Back when on quiz step */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <p className="text-xs text-muted">
+          You can tweak the personality quiz later from the intro page.
+        </p>
         <button
-          onClick={() => setStep(1)}
-          disabled={step === 1}
-          className="text-sm text-muted hover:text-anu-navy disabled:opacity-30 inline-flex items-center gap-1 transition"
+          onClick={finish}
+          disabled={!step1Ready}
+          className="text-sm bg-terra text-white px-5 py-2 rounded-full hover:opacity-90 disabled:opacity-40 inline-flex items-center gap-1.5 transition"
         >
-          <ChevronLeft size={16} /> Back
+          Finish onboarding →
         </button>
-
-        {step === 1 && (
-          <button
-            onClick={() => setStep(2)}
-            disabled={!step1Ready}
-            className="text-sm bg-terra text-white px-5 py-2 rounded-full hover:opacity-90 disabled:opacity-40 inline-flex items-center gap-1.5 transition"
-          >
-            Continue →
-          </button>
-        )}
       </div>
     </div>
   );
@@ -213,13 +207,43 @@ function ProgressBar({ step }: { step: 1 | 2 }) {
         />
       </div>
       <h1 className="font-serif text-2xl text-anu-navy">
-        {step === 1 ? "Your courses & sessions" : "A few quick questions"}
+        Your courses & sessions
       </h1>
       <p className="text-sm text-muted mt-1">
-        {step === 1
-          ? "Add your courses and pick the sessions you're enrolled in."
-          : "These help us find the right people for you."}
+        Add your courses and pick the sessions you're enrolled in.
       </p>
+    </div>
+  );
+}
+
+function PersonalityRecap({ draft }: { draft: { studyStyle: StudyStyle | null; productiveTime: ProductiveTime | null; partnerPriority: PartnerPriority | null; freeTimeInterests: FreeTime[] } }) {
+  const chips: { label: string; value: string }[] = [];
+  if (draft.studyStyle) chips.push({ label: "Study", value: draft.studyStyle });
+  if (draft.productiveTime) chips.push({ label: "Energy", value: draft.productiveTime });
+  if (draft.partnerPriority) chips.push({ label: "Match", value: draft.partnerPriority });
+  if (draft.freeTimeInterests.length > 0)
+    chips.push({ label: "Off-duty", value: draft.freeTimeInterests.join(", ") });
+
+  return (
+    <div className="card p-4 border-dashed border-[#D9CEC0] bg-anu-cream/60 space-y-3">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-muted">Quiz locked in</p>
+          <p className="text-sm text-anu-navy">Your vibe will shape who gets recommended.</p>
+        </div>
+        <div className="text-xs text-muted">This part feeds matching.</div>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {chips.map((chip) => (
+          <span
+            key={chip.label}
+            className="px-3 py-1.5 rounded-full border border-[#D9CEC0] bg-white text-xs text-anu-navy"
+          >
+            <span className="text-muted mr-1">{chip.label}</span>
+            {chip.value}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

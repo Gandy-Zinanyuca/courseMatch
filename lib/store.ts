@@ -2,7 +2,14 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { Course, Session, StudentId, User, UserSession } from "./types";
+import type {
+  Course,
+  PersonalityQuizDraft,
+  Session,
+  StudentId,
+  User,
+  UserSession,
+} from "./types";
 
 import coursesJson from "@/data/courses.json";
 import sessionsJson from "@/data/sessions.json";
@@ -19,6 +26,7 @@ type PersistedSlice = {
   // Mutable layer over seed data — represents YOU plus any swaps you've made.
   myProfile: User | null;
   myUserSessions: UserSession[]; // your sessionIds (only)
+  personalityDraft: PersonalityQuizDraft | null;
   // Optional time-warp for "free now" demos. null = real time.
   timeWarp: { day: number; minute: number } | null; // 0=Mon..4=Fri
 };
@@ -42,6 +50,8 @@ type State = PersistedSlice & {
 
   // Mutations
   completeOnboarding: (user: User, sessionIds: string[]) => void;
+  setPersonalityDraft: (draft: PersonalityQuizDraft) => void;
+  clearPersonalityDraft: () => void;
   updateMyProfile: (patch: Partial<User>) => void;
   setMyCourses: (sessionIds: string[]) => void;
   swapMySession: (oldSessionId: string, newSessionId: string) => void;
@@ -56,6 +66,7 @@ export const useStore = create<State>()(
       currentUserId: null,
       myProfile: null,
       myUserSessions: [],
+      personalityDraft: null,
       timeWarp: null,
       hydrated: false,
       setHydrated: (b) => set({ hydrated: b }),
@@ -95,6 +106,8 @@ export const useStore = create<State>()(
           myUserSessions: sessionIds.map((sid) => ({ userId: user.id, sessionId: sid })),
         });
       },
+      setPersonalityDraft: (draft) => set({ personalityDraft: draft }),
+      clearPersonalityDraft: () => set({ personalityDraft: null }),
       updateMyProfile: (patch) => {
         const cur = get().myProfile;
         if (!cur) return;
@@ -131,7 +144,13 @@ export const useStore = create<State>()(
         });
       },
       resetDemo: () => {
-        set({ currentUserId: null, myProfile: null, myUserSessions: [], timeWarp: null });
+        set({
+          currentUserId: null,
+          myProfile: null,
+          myUserSessions: [],
+          personalityDraft: null,
+          timeWarp: null,
+        });
       },
       setTimeWarp: (t) => set({ timeWarp: t }),
     }),
@@ -142,6 +161,7 @@ export const useStore = create<State>()(
         currentUserId: s.currentUserId,
         myProfile: s.myProfile,
         myUserSessions: s.myUserSessions,
+        personalityDraft: s.personalityDraft,
         timeWarp: s.timeWarp,
       }),
       onRehydrateStorage: () => (state) => {

@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!hydrated) return;
-    router.replace(currentUserId ? "/discover" : "/onboarding");
+    router.replace(currentUserId ? "/discover" : "/intro");
   }, [hydrated, currentUserId, router]);
 
   return (
