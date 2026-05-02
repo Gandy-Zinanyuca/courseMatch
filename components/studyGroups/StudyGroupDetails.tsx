@@ -21,6 +21,7 @@ export function StudyGroupDetails({ group }: { group: StudyGroup }) {
   const [chatText, setChatText] = useState("");
 
   if (!me) return null;
+  const currentUser = me;
 
   const ownerName =
     allStudents.find((student) => student.id === group.ownerId)?.name ??
@@ -36,8 +37,8 @@ export function StudyGroupDetails({ group }: { group: StudyGroup }) {
       id,
       text: chatText.trim(),
       at: Date.now(),
-      authorId: me.id,
-      authorName: me.name,
+      authorId: currentUser.id,
+      authorName: currentUser.name,
       sender: "me",
     });
     setChatText("");
@@ -51,13 +52,13 @@ export function StudyGroupDetails({ group }: { group: StudyGroup }) {
         message.authorId
       );
     }
-    if (message.sender === "me") return me.name;
+    if (message.sender === "me") return currentUser.name;
     if (message.sender === "them") return ownerName;
     return "Unknown";
   }
 
   function isMyMessage(message: ChatMessage) {
-    if (message.authorId) return message.authorId === me.id;
+    if (message.authorId) return message.authorId === currentUser.id;
     return message.sender === "me";
   }
 
@@ -85,7 +86,7 @@ export function StudyGroupDetails({ group }: { group: StudyGroup }) {
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_0.9fr] lg:items-start">
         <div className="space-y-4">
           <div className="rounded-3xl border border-[#E0D8CC] bg-[#faf6f0] p-4">
-            {group.memberIds.includes(me.id) ? (
+            {group.memberIds.includes(currentUser.id) ? (
               <button
                 type="button"
                 onClick={() => leaveStudyGroup(group.id)}
@@ -93,7 +94,7 @@ export function StudyGroupDetails({ group }: { group: StudyGroup }) {
               >
                 Leave this group
               </button>
-            ) : group.requestIds.includes(me.id) ? (
+            ) : group.requestIds.includes(currentUser.id) ? (
               <div className="rounded-3xl bg-white p-4 text-sm text-anu-navy/80">
                 Your request to join group chat is pending approval.
               </div>
@@ -108,7 +109,7 @@ export function StudyGroupDetails({ group }: { group: StudyGroup }) {
             )}
           </div>
 
-          {group.ownerId === me.id && group.requestIds.length > 0 && (
+          {group.ownerId === currentUser.id && group.requestIds.length > 0 && (
             <div className="rounded-3xl border border-[#E0D8CC] bg-[#f0f6f0] p-4">
               <div className="text-sm font-semibold text-anu-navy">
                 Pending join requests
@@ -193,7 +194,7 @@ export function StudyGroupDetails({ group }: { group: StudyGroup }) {
           <div className="flex items-center gap-2 text-sm font-semibold text-anu-navy">
             <MessageCircle size={16} /> Group chat
           </div>
-          {group.memberIds.includes(me.id) ? (
+          {group.memberIds.includes(currentUser.id) ? (
             <>
               <div className="mt-4 max-h-80 space-y-3 overflow-y-auto pr-2 text-sm">
                 {group.chat.length === 0 ? (
