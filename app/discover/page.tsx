@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/store";
+import { useShallow } from "zustand/shallow";
 import { rankMatches } from "@/lib/matching";
 import { isFreeNow, realNow, type NowMoment } from "@/lib/timetable";
 import { StudentCard } from "@/components/student/StudentCard";
@@ -16,8 +17,8 @@ export default function DiscoverPage() {
   const router = useRouter();
   const hydrated = useStore((s) => s.hydrated);
   const me = useStore((s) => s.myProfile);
-  const allStudents = useStore((s) => s.allStudents());
-  const allUserSessions = useStore((s) => s.allUserSessions());
+  const allStudents = useStore(useShallow((s) => s.allStudents()));
+  const allUserSessions = useStore(useShallow((s) => s.allUserSessions()));
   const allSessions = useStore((s) => s.sessions);
   const courses = useStore((s) => s.courses);
   const timeWarp = useStore((s) => s.timeWarp);

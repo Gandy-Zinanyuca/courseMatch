@@ -5,14 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Search as SearchIcon } from "lucide-react";
 import { useStore } from "@/lib/store";
+import { useShallow } from "zustand/shallow";
 import type { User } from "@/lib/types";
 
 export default function SearchPage() {
   const router = useRouter();
   const hydrated = useStore((s) => s.hydrated);
   const me = useStore((s) => s.myProfile);
-  const allStudents = useStore((s) => s.allStudents());
-  const allUserSessions = useStore((s) => s.allUserSessions());
+  const allStudents = useStore(useShallow((s) => s.allStudents()));
+  const allUserSessions = useStore(useShallow((s) => s.allUserSessions()));
 
   useEffect(() => {
     if (hydrated && !me) router.replace("/onboarding");

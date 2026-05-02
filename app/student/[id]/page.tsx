@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, MessageCircle } from "lucide-react";
 import { useStore } from "@/lib/store";
+import { useShallow } from "zustand/shallow";
 import { rankMatches } from "@/lib/matching";
 import { WeekGrid } from "@/components/timetable/WeekGrid";
 import { sessionTypeLabel, type StudentId } from "@/lib/types";
@@ -20,8 +21,8 @@ export default function StudentPage() {
   const me = useStore((s) => s.myProfile);
   const studentById = useStore((s) => s.studentById);
   const sessionsForUser = useStore((s) => s.sessionsForUser);
-  const allStudents = useStore((s) => s.allStudents());
-  const allUserSessions = useStore((s) => s.allUserSessions());
+  const allStudents = useStore(useShallow((s) => s.allStudents()));
+  const allUserSessions = useStore(useShallow((s) => s.allUserSessions()));
   const allSessions = useStore((s) => s.sessions);
   const courses = useStore((s) => s.courses);
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/store";
+import { useShallow } from "zustand/shallow";
 import { Clock, RefreshCcw, UserCog, X } from "lucide-react";
 import { cx } from "@/lib/cx";
 
@@ -11,7 +12,7 @@ const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 export function DevSwitcher() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const allStudents = useStore((s) => s.allStudents());
+  const allStudents = useStore(useShallow((s) => s.allStudents()));
   const currentUserId = useStore((s) => s.currentUserId);
   const setCurrentUser = useStore((s) => s.setCurrentUser);
   const resetDemo = useStore((s) => s.resetDemo);

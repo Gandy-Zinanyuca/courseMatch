@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
+import { useShallow } from "zustand/shallow";
 import { rankMatches } from "@/lib/matching";
 import { peersInSession } from "@/lib/timetable";
 import { DraggableGrid } from "@/components/timetable/DraggableGrid";
@@ -35,8 +36,8 @@ function ProfileInner() {
   const hydrated = useStore((s) => s.hydrated);
   const me = useStore((s) => s.myProfile);
   const myUserSessions = useStore((s) => s.myUserSessions);
-  const allUserSessions = useStore((s) => s.allUserSessions());
-  const allStudents = useStore((s) => s.allStudents());
+  const allUserSessions = useStore(useShallow((s) => s.allUserSessions()));
+  const allStudents = useStore(useShallow((s) => s.allStudents()));
   const allSessions = useStore((s) => s.sessions);
   const courses = useStore((s) => s.courses);
   const swapMySession = useStore((s) => s.swapMySession);
