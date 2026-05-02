@@ -13,6 +13,8 @@ import {
   FREE_TIME_OPTIONS,
   sessionTypeLabel,
   type FreeTime,
+  type PartnerPriority,
+  type ProductiveTime,
   type Session,
   type StudyStyle,
   type User,
@@ -85,15 +87,14 @@ function ProfileInner() {
     <div className="space-y-5">
       <div className="flex items-end justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-anu-navy">My timetable</h1>
-          <p className="text-sm text-anu-navy/60">
-            Drag any class block to swap into another session of the same course. Green slots are
-            safe; red slots clash.
+          <h1 className="font-serif text-2xl text-anu-navy">My timetable</h1>
+          <p className="text-sm text-muted mt-1">
+            Drag any class block to swap into another session. Green slots are safe; red clash.
           </p>
         </div>
         <button
           onClick={() => setShowEdit(true)}
-          className="text-sm inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-anu-navy/20 text-anu-navy hover:bg-anu-navy/5"
+          className="text-sm inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#E0D8CC] text-anu-navy hover:border-terra hover:text-terra transition"
         >
           <Settings2 size={14} /> Edit profile
         </button>
@@ -117,6 +118,8 @@ function ProfileInner() {
           </Link>
         </div>
       )}
+
+      <PersonalityBar user={me} />
 
       <DraggableGrid
         myUserSessions={myUserSessions}
@@ -145,19 +148,40 @@ function ProfileInner() {
 }
 
 function ProfileSummary({ user }: { user: User }) {
+  const initials = user.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
-    <div className="card p-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
-      <Row label="Name" value={user.name} />
-      <Row label="Student ID" value={<span className="font-mono">{user.id}</span>} />
-      <Row label="Degree" value={user.degree} />
-      <Row label="Year" value={`Year ${user.year}`} />
-      <Row label="Age" value={user.ageRange} />
-      <Row label="Gender" value={user.gender} />
-      <Row label="Study style" value={user.studyStyle} />
-      <Row
-        label="Interests"
-        value={user.freeTimeInterests.join(", ") || <span className="opacity-50">none</span>}
-      />
+    <div className="card p-5 space-y-4">
+      <div className="flex items-center gap-4">
+        <div className="w-14 h-14 rounded-full bg-sage/20 flex items-center justify-center font-serif text-xl text-sage flex-shrink-0">
+          {initials}
+        </div>
+        <div>
+          <div className="font-serif text-xl text-anu-navy">{user.name}</div>
+          <div className="text-sm text-muted mt-0.5">
+            {user.degree} · Year {user.year}
+          </div>
+        </div>
+      </div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm pt-2 border-t border-[#E0D8CC]">
+        <Row label="Student ID" value={<span className="font-mono text-xs">{user.id}</span>} />
+        <Row label="Age" value={user.ageRange} />
+        <Row label="Gender" value={user.gender} />
+        <Row label="Study style" value={user.studyStyle} />
+        <Row
+          label="Interests"
+          value={
+            user.freeTimeInterests.length > 0
+              ? user.freeTimeInterests.join(", ")
+              : <span className="text-muted/50">none</span>
+          }
+        />
+      </div>
     </div>
   );
 }
@@ -165,8 +189,53 @@ function ProfileSummary({ user }: { user: User }) {
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-wide text-anu-navy/50">{label}</div>
-      <div className="text-anu-navy">{value}</div>
+      <div className="text-[10px] uppercase tracking-wider text-muted mb-0.5">{label}</div>
+      <div className="text-anu-navy text-sm">{value}</div>
+    </div>
+  );
+}
+
+const STUDY_LABELS: Record<string, string> = {
+  alone: "Solo focus",
+  small: "Small group",
+  large: "Study groups",
+  "no-preference": "Flexible",
+};
+const PRODUCTIVE_LABELS: Record<ProductiveTime, string> = {
+  morning: "Morning person",
+  afternoon: "Afternoon",
+  night: "Night owl",
+  flexible: "Whenever",
+};
+const PRIORITY_LABELS: Record<PartnerPriority, string> = {
+  courses: "Same courses",
+  goals: "Similar goals",
+  personality: "Personality fit",
+  everything: "The full package",
+};
+
+function PersonalityBar({ user }: { user: User }) {
+  if (!user.productiveTime && !user.partnerPriority) return null;
+
+  const chips: { label: string; value: string }[] = [
+    { label: "Studies", value: STUDY_LABELS[user.studyStyle] ?? user.studyStyle },
+  ];
+  if (user.productiveTime)
+    chips.push({ label: "Productive", value: PRODUCTIVE_LABELS[user.productiveTime] });
+  if (user.partnerPriority)
+    chips.push({ label: "Values", value: PRIORITY_LABELS[user.partnerPriority] });
+
+  return (
+    <div className="card p-4 flex items-center gap-3 flex-wrap">
+      <span className="text-[11px] uppercase tracking-wider text-muted font-medium">Personality</span>
+      <div className="flex gap-2 flex-wrap">
+        {chips.map((c) => (
+          <div key={c.label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-anu-cream border border-[#E0D8CC]">
+            <span className="text-[10px] text-muted uppercase tracking-wide">{c.label}</span>
+            <span className="text-xs text-anu-navy font-medium">{c.value}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -211,8 +280,8 @@ function EditProfileModal({
                 className={cx(
                   "px-3 py-1 rounded-full text-xs border",
                   interests.includes(i)
-                    ? "bg-anu-navy text-white border-anu-navy"
-                    : "bg-white text-anu-navy border-anu-navy/20"
+                    ? "bg-terra text-white border-terra"
+                    : "bg-anu-cream text-anu-navy border-[#E0D8CC]"
                 )}
               >
                 {i}
@@ -230,8 +299,8 @@ function EditProfileModal({
                 className={cx(
                   "px-3 py-1 rounded-full text-xs border",
                   studyStyle === s
-                    ? "bg-anu-navy text-white border-anu-navy"
-                    : "bg-white text-anu-navy border-anu-navy/20"
+                    ? "bg-terra text-white border-terra"
+                    : "bg-anu-cream text-anu-navy border-[#E0D8CC]"
                 )}
               >
                 {s}
@@ -246,7 +315,7 @@ function EditProfileModal({
         <div className="flex justify-end">
           <button
             onClick={() => onSave({ freeTimeInterests: interests, studyStyle })}
-            className="text-sm bg-anu-navy text-white px-4 py-1.5 rounded-full hover:bg-anu-navyDark"
+            className="text-sm bg-terra text-white px-4 py-1.5 rounded-full hover:opacity-90 transition"
           >
             Save
           </button>

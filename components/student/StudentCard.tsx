@@ -2,16 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { CalendarDays, MessageCircle, Sparkles, Zap } from "lucide-react";
-import type { Match, SessionType } from "@/lib/types";
-import { sessionTypeLabel } from "@/lib/types";
-import { cx } from "@/lib/cx";
+import type { Match } from "@/lib/types";
 import { useStore } from "@/lib/store";
-
-const STATUS_TONE: Record<string, string> = {
-  same: "bg-emerald-100 text-emerald-800 border-emerald-300",
-  swappable: "bg-amber-100 text-amber-800 border-amber-300",
-};
 
 export function StudentCard({
   match,
@@ -26,9 +18,11 @@ export function StudentCard({
   const sameCount = shared.filter((s) => s.status === "same").length;
   const swapCount = shared.filter((s) => s.status === "swappable").length;
 
+  const stripeColor =
+    sameCount > 0 ? "bg-terra" : swapCount > 0 ? "bg-sage" : "bg-muted";
+
   const me = useStore((s) => s.myProfile);
 
-  // Lazy fetch the AI blurb when the card mounts.
   const [blurb, setBlurb] = useState<string | undefined>(match.blurb);
   useEffect(() => {
     if (blurb || !me) return;
@@ -47,93 +41,68 @@ export function StudentCard({
         /* noop */
       }
     })();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.id, me?.id]);
 
   return (
-    <div className="card p-4 flex flex-col gap-3">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-anu-navy">{user.name}</h3>
-            <span className="text-xs text-anu-navy/50 font-mono">{user.id}</span>
+    <div className="bg-white rounded-2xl border border-[#E0D8CC] overflow-hidden flex animate-[fadeUp_.4s_ease-out_both]">
+      <div className={`w-[3px] flex-shrink-0 ${stripeColor}`} />
+      <div className="flex-1 p-4 space-y-2.5">
+
+        {/* Header */}
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <div className="font-medium text-anu-navy text-[15px] leading-tight">{user.name}</div>
+            <div className="text-xs text-muted mt-0.5">{user.degree} · Year {user.year}</div>
           </div>
-          <p className="text-xs text-anu-navy/70">
-            {user.degree} · Year {user.year}
-          </p>
-        </div>
-        <div className="flex flex-col items-end gap-1">
           {freeNow && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-medium bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-300">
-              <Zap size={10} /> Free now
-            </span>
+            <div className="flex items-center gap-1.5 text-[11px] text-sage font-medium flex-shrink-0">
+              <div className="w-1.5 h-1.5 rounded-full bg-sage" />
+              Free now
+            </div>
           )}
-          <span className="text-[10px] text-anu-navy/40">match score {score}</span>
         </div>
-      </div>
 
-      {/* Blurb */}
-      <div className="flex items-start gap-1.5 text-xs text-anu-navy/80 italic">
-        <Sparkles size={12} className="mt-0.5 text-anu-gold flex-shrink-0" />
-        <span>{blurb ?? "…"}</span>
-      </div>
+        {/* Course tags */}
+        {shared.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {shared.map((s, i) => (
+              <span
+                key={`${s.courseCode}-${s.type}-${i}`}
+                className="text-[11px] px-2.5 py-0.5 rounded-full border border-[#E0D8CC] text-anu-navy inline-flex items-center gap-1"
+              >
+                {s.courseCode}
+                <span className="text-muted text-[10px]">
+                  {s.status === "same" ? `same ${s.type}` : `diff. session`}
+                </span>
+              </span>
+            ))}
+          </div>
+        )}
 
-      {/* Shared sessions */}
-      <div className="flex flex-wrap gap-1.5">
-        {shared.map((s, i) => (
-          <span
-            key={`${s.courseCode}-${s.type}-${i}`}
-            className={cx(
-              "text-[10px] px-2 py-0.5 rounded-full border",
-              STATUS_TONE[s.status]
-            )}
-            title={
-              s.status === "same"
-                ? `Same ${sessionTypeLabel[s.type].toLowerCase()}`
-                : `Different ${sessionTypeLabel[s.type].toLowerCase()} — swappable`
-            }
+        {/* AI blurb */}
+        <p className="text-[12px] text-sage italic leading-snug">
+          {blurb ?? "…"}
+        </p>
+
+        {/* Actions */}
+        <div className="flex gap-2 pt-0.5">
+          <Link
+            href={`/student/${user.id}`}
+            className="flex-1 py-2 px-3 rounded-[14px] border border-[#E0D8CC] text-xs text-anu-navy text-center hover:border-terra hover:text-terra transition"
           >
-            {s.courseCode} · {s.status === "same" ? `same ${s.type}` : `swap ${s.type}`}
-          </span>
-        ))}
-      </div>
-
-      {/* Interests */}
-      {user.freeTimeInterests.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {user.freeTimeInterests.map((i) => (
-            <span
-              key={i}
-              className="text-[10px] px-1.5 py-0.5 rounded bg-anu-cream text-anu-navy/70"
-            >
-              {i}
-            </span>
-          ))}
+            View Timetable
+          </Link>
+          <button
+            onClick={onMessage}
+            className="flex-1 py-2 px-3 rounded-[14px] border border-terra bg-terra text-white text-xs hover:opacity-88 transition"
+          >
+            Message
+          </button>
         </div>
-      )}
 
-      {/* Actions */}
-      <div className="flex items-center gap-2 pt-1 border-t border-anu-navy/10 mt-1">
-        <Link
-          href={`/student/${user.id}`}
-          className="flex-1 text-center text-xs py-1.5 rounded-md border border-anu-navy/20 text-anu-navy hover:bg-anu-navy/5 inline-flex items-center justify-center gap-1.5"
-        >
-          <CalendarDays size={13} /> View timetable
-        </Link>
-        <button
-          onClick={onMessage}
-          className="flex-1 text-xs py-1.5 rounded-md bg-anu-navy text-white hover:bg-anu-navyDark inline-flex items-center justify-center gap-1.5"
-        >
-          <MessageCircle size={13} /> Message
-        </button>
       </div>
-
-      {sameCount + swapCount === 0 && (
-        <p className="text-[10px] text-anu-navy/40 italic">No shared courses found.</p>
-      )}
     </div>
   );
 }

@@ -10,6 +10,9 @@ export type SessionType = "lecture" | "tutorial" | "lab";
 export type Year = 1 | 2 | 3 | 4;
 export type AgeRange = "18-19" | "20-22" | "23+";
 export type StudyStyle = "alone" | "small" | "large" | "no-preference";
+export type ProductiveTime = "morning" | "afternoon" | "night" | "flexible";
+export type PartnerPriority = "courses" | "goals" | "personality" | "everything";
+
 export const FREE_TIME_OPTIONS = [
   "gym",
   "gaming",
@@ -29,6 +32,8 @@ export type User = {
   gender: string;
   freeTimeInterests: FreeTime[];
   studyStyle: StudyStyle;
+  productiveTime?: ProductiveTime;
+  partnerPriority?: PartnerPriority;
 };
 
 export type Course = {

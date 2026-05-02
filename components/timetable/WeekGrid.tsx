@@ -30,22 +30,22 @@ export function WeekGrid({
     <div className={cx("card overflow-hidden", className)}>
       <div className="grid grid-cols-[60px_repeat(5,minmax(0,1fr))] text-xs">
         {/* Header */}
-        <div className="border-b border-anu-navy/10 bg-anu-cream" />
+        <div className="border-b border-[#E0D8CC] bg-anu-cream/60" />
         {DAYS.map((d) => (
           <div
             key={d}
-            className="text-center font-medium py-2 border-b border-l border-anu-navy/10 bg-anu-cream"
+            className="text-center font-medium py-2 border-b border-l border-[#E0D8CC] bg-anu-cream/60"
           >
             {d}
           </div>
         ))}
 
         {/* Time column */}
-        <div className="relative border-r border-anu-navy/10" style={{ height: TOTAL_ROWS * ROW_PX }}>
+        <div className="relative border-r border-[#E0D8CC]" style={{ height: TOTAL_ROWS * ROW_PX }}>
           {Array.from({ length: TOTAL_ROWS / 2 }).map((_, hour) => (
             <div
               key={hour}
-              className="absolute left-0 right-0 text-anu-navy/50 px-1"
+              className="absolute left-0 right-0 text-muted px-1"
               style={{ top: hour * 2 * ROW_PX, height: 2 * ROW_PX }}
             >
               <span className="text-[10px]">
@@ -83,7 +83,7 @@ function DayColumn({
 }) {
   return (
     <div
-      className="relative border-l border-anu-navy/10"
+      className="relative border-l border-[#E0D8CC]"
       style={{ height: TOTAL_ROWS * ROW_PX }}
     >
       {/* Half-hour stripes */}
@@ -92,7 +92,7 @@ function DayColumn({
           key={i}
           className={cx(
             "absolute left-0 right-0 border-t",
-            i % 2 === 0 ? "border-anu-navy/10" : "border-anu-navy/5"
+            i % 2 === 0 ? "border-[#E0D8CC]" : "border-anu-navy/5"
           )}
           style={{ top: i * ROW_PX, height: ROW_PX }}
         />
@@ -133,12 +133,12 @@ export function SessionBlock({
 
   const variantClass: Record<NonNullable<Block["variant"]>, string> = {
     primary:
-      "bg-anu-navy text-white border border-anu-navy/40 hover:bg-anu-navyDark cursor-pointer",
+      "bg-terra text-white border border-terra/40 hover:opacity-90 cursor-pointer",
     ghost:
-      "bg-anu-goldLight/30 text-anu-navy/70 border border-dashed border-anu-gold/60",
+      "bg-sage/20 text-sage border border-dashed border-sage/50",
     highlight:
-      "bg-anu-goldLight text-anu-navy border-2 border-anu-gold animate-pulse",
-    muted: "bg-anu-navy/10 text-anu-navy/60 border border-anu-navy/10",
+      "bg-sage text-white border-2 border-sageDark animate-pulse",
+    muted: "bg-muted/10 text-muted border border-muted/20",
   };
 
   return (
@@ -158,7 +158,7 @@ export function SessionBlock({
       </div>
       <div className="opacity-80 truncate">{session.location}</div>
       {badge && (
-        <div className="absolute top-1 right-1 bg-anu-gold text-white text-[9px] px-1 rounded-full">
+        <div className="absolute top-1 right-1 bg-terra text-white text-[9px] px-1 rounded-full">
           {badge}
         </div>
       )}

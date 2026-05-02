@@ -6,17 +6,19 @@ import { useStore } from "@/lib/store";
 import {
   FREE_TIME_OPTIONS,
   STUDENT_ID_RE,
-  type AgeRange,
   type FreeTime,
+  type PartnerPriority,
+  type ProductiveTime,
   type Session,
   type StudentId,
   type StudyStyle,
   type User,
   type Year,
+  type AgeRange,
 } from "@/lib/types";
 import { CourseSessionPicker } from "@/components/onboarding/CourseSessionPicker";
 import { WeekGrid } from "@/components/timetable/WeekGrid";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { cx } from "@/lib/cx";
 
 type Draft = {
@@ -28,6 +30,8 @@ type Draft = {
   gender: string;
   freeTimeInterests: FreeTime[];
   studyStyle: StudyStyle | null;
+  productiveTime: ProductiveTime | null;
+  partnerPriority: PartnerPriority | null;
 };
 
 const EMPTY_DRAFT: Draft = {
@@ -39,7 +43,84 @@ const EMPTY_DRAFT: Draft = {
   gender: "",
   freeTimeInterests: [],
   studyStyle: null,
+  productiveTime: null,
+  partnerPriority: null,
 };
+
+type QuizQ = {
+  key: string;
+  q: string;
+  multiSelect?: boolean;
+  opts: { label: string; value: string | number }[];
+};
+
+const QUIZ: QuizQ[] = [
+  {
+    key: "studyStyle",
+    q: "How do you prefer to study?",
+    opts: [
+      { label: "Solo, deep focus sessions", value: "alone" },
+      { label: "Small group of 2–3", value: "small" },
+      { label: "Larger study groups", value: "large" },
+      { label: "Flexible, depends on topic", value: "no-preference" },
+    ],
+  },
+  {
+    key: "productiveTime",
+    q: "When are you most productive?",
+    opts: [
+      { label: "Early morning", value: "morning" },
+      { label: "Afternoon", value: "afternoon" },
+      { label: "Late night", value: "night" },
+      { label: "Varies by week", value: "flexible" },
+    ],
+  },
+  {
+    key: "partnerPriority",
+    q: "What matters most in a study partner?",
+    opts: [
+      { label: "Same courses", value: "courses" },
+      { label: "Similar goals", value: "goals" },
+      { label: "Personality fit", value: "personality" },
+      { label: "All of the above", value: "everything" },
+    ],
+  },
+  {
+    key: "year",
+    q: "What year are you in?",
+    opts: [
+      { label: "Year 1", value: 1 },
+      { label: "Year 2", value: 2 },
+      { label: "Year 3", value: 3 },
+      { label: "Year 4", value: 4 },
+    ],
+  },
+  {
+    key: "ageRange",
+    q: "How old are you?",
+    opts: [
+      { label: "18–19", value: "18-19" },
+      { label: "20–22", value: "20-22" },
+      { label: "23+", value: "23+" },
+    ],
+  },
+  {
+    key: "gender",
+    q: "Your gender?",
+    opts: [
+      { label: "Female", value: "female" },
+      { label: "Male", value: "male" },
+      { label: "Non-binary", value: "non-binary" },
+      { label: "Prefer not to say", value: "prefer not to say" },
+    ],
+  },
+  {
+    key: "freeTimeInterests",
+    q: "What do you get up to in your free time?",
+    multiSelect: true,
+    opts: FREE_TIME_OPTIONS.map((f) => ({ label: f, value: f })),
+  },
+];
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -60,20 +141,19 @@ export default function OnboardingPage() {
   const idValid = STUDENT_ID_RE.test(draft.id);
   const step1Ready =
     idValid && draft.name.trim() && draft.degree.trim() && sessionIds.length > 0;
-  const step2Ready =
-    draft.year !== null && draft.ageRange !== null && draft.gender && draft.studyStyle;
 
   function finish() {
-    if (!step2Ready || !step1Ready) return;
     const user: User = {
       id: draft.id as StudentId,
       name: draft.name.trim(),
       degree: draft.degree.trim(),
-      year: draft.year as Year,
-      ageRange: draft.ageRange as AgeRange,
-      gender: draft.gender,
+      year: (draft.year ?? 1) as Year,
+      ageRange: (draft.ageRange ?? "18-19") as AgeRange,
+      gender: draft.gender || "prefer not to say",
       freeTimeInterests: draft.freeTimeInterests,
-      studyStyle: draft.studyStyle as StudyStyle,
+      studyStyle: (draft.studyStyle ?? "no-preference") as StudyStyle,
+      productiveTime: draft.productiveTime ?? undefined,
+      partnerPriority: draft.partnerPriority ?? undefined,
     };
     completeOnboarding(user, sessionIds);
     router.replace("/discover");
@@ -81,7 +161,7 @@ export default function OnboardingPage() {
 
   return (
     <div className="space-y-6">
-      <Header step={step} />
+      <ProgressBar step={step} />
 
       {step === 1 && (
         <Step1
@@ -95,31 +175,27 @@ export default function OnboardingPage() {
         />
       )}
 
-      {step === 2 && <Step2 draft={draft} setDraft={setDraft} />}
+      {step === 2 && (
+        <QuizStep draft={draft} setDraft={setDraft} onDone={finish} />
+      )}
 
+      {/* Footer nav — only show Back when on quiz step */}
       <div className="flex items-center justify-between">
         <button
           onClick={() => setStep(1)}
           disabled={step === 1}
-          className="text-sm text-anu-navy/70 hover:text-anu-navy disabled:opacity-30 inline-flex items-center gap-1"
+          className="text-sm text-muted hover:text-anu-navy disabled:opacity-30 inline-flex items-center gap-1 transition"
         >
           <ChevronLeft size={16} /> Back
         </button>
-        {step === 1 ? (
+
+        {step === 1 && (
           <button
             onClick={() => setStep(2)}
             disabled={!step1Ready}
-            className="text-sm bg-anu-navy text-white px-5 py-2 rounded-full hover:bg-anu-navyDark disabled:opacity-40 inline-flex items-center gap-1.5"
+            className="text-sm bg-terra text-white px-5 py-2 rounded-full hover:opacity-90 disabled:opacity-40 inline-flex items-center gap-1.5 transition"
           >
-            Next <ChevronRight size={16} />
-          </button>
-        ) : (
-          <button
-            onClick={finish}
-            disabled={!step2Ready}
-            className="text-sm bg-anu-gold text-white px-5 py-2 rounded-full hover:bg-anu-goldLight disabled:opacity-40"
-          >
-            Finish setup
+            Continue →
           </button>
         )}
       </div>
@@ -127,26 +203,23 @@ export default function OnboardingPage() {
   );
 }
 
-function Header({ step }: { step: 1 | 2 }) {
+function ProgressBar({ step }: { step: 1 | 2 }) {
   return (
-    <div className="flex items-center gap-4">
-      <h1 className="text-2xl font-semibold text-anu-navy">Set up your profile</h1>
-      <div className="flex-1" />
-      <div className="flex items-center gap-2 text-xs">
-        <span
-          className={cx(
-            "h-2 w-8 rounded-full",
-            step >= 1 ? "bg-anu-gold" : "bg-anu-navy/20"
-          )}
+    <div>
+      <div className="h-[2px] bg-[#E0D8CC] rounded-full overflow-hidden mb-5">
+        <div
+          className="h-full bg-terra rounded-full transition-all duration-500"
+          style={{ width: step === 1 ? "50%" : "100%" }}
         />
-        <span
-          className={cx(
-            "h-2 w-8 rounded-full",
-            step >= 2 ? "bg-anu-gold" : "bg-anu-navy/20"
-          )}
-        />
-        <span className="text-anu-navy/60 ml-1">Step {step} of 2</span>
       </div>
+      <h1 className="font-serif text-2xl text-anu-navy">
+        {step === 1 ? "Your courses & sessions" : "A few quick questions"}
+      </h1>
+      <p className="text-sm text-muted mt-1">
+        {step === 1
+          ? "Add your courses and pick the sessions you're enrolled in."
+          : "These help us find the right people for you."}
+      </p>
     </div>
   );
 }
@@ -182,10 +255,10 @@ function Step1({
               onChange={(e) => setDraft((d) => ({ ...d, id: e.target.value.trim() }))}
               placeholder="u7234189"
               className={cx(
-                "w-full px-3 py-2 rounded-md border bg-white text-sm font-mono",
+                "w-full px-3 py-2 rounded-xl border text-sm font-mono transition",
                 draft.id && !idValid
-                  ? "border-red-400 focus:outline-red-400"
-                  : "border-anu-navy/20 focus:outline-anu-navy"
+                  ? "border-red-400 bg-soft-red/30 focus:outline-none"
+                  : "border-[#E0D8CC] bg-anu-cream focus:outline-none focus:border-terra"
               )}
             />
           </Field>
@@ -194,7 +267,7 @@ function Step1({
               value={draft.name}
               onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
               placeholder="Alex Tran"
-              className="w-full px-3 py-2 rounded-md border border-anu-navy/20 bg-white text-sm focus:outline-anu-navy"
+              className="w-full px-3 py-2 rounded-xl border border-[#E0D8CC] bg-anu-cream text-sm focus:outline-none focus:border-terra transition"
             />
           </Field>
           <Field label="Degree">
@@ -202,16 +275,15 @@ function Step1({
               value={draft.degree}
               onChange={(e) => setDraft((d) => ({ ...d, degree: e.target.value }))}
               placeholder="Bachelor of Computing"
-              className="w-full px-3 py-2 rounded-md border border-anu-navy/20 bg-white text-sm focus:outline-anu-navy"
+              className="w-full px-3 py-2 rounded-xl border border-[#E0D8CC] bg-anu-cream text-sm focus:outline-none focus:border-terra transition"
             />
           </Field>
         </div>
 
         <div className="card p-4 space-y-3">
           <h2 className="font-medium text-anu-navy">Your courses</h2>
-          <p className="text-xs text-anu-navy/60">
-            Search ANU course codes or names. For each, pick the lecture, tutorial, and lab
-            (if there is one) you're enrolled in.
+          <p className="text-xs text-muted">
+            Search ANU course codes or names. For each, pick your lecture, tutorial, and lab session.
           </p>
           <CourseSessionPicker
             courses={courses}
@@ -223,76 +295,128 @@ function Step1({
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-sm font-medium text-anu-navy/80">Your week</h2>
+        <h2 className="text-sm font-medium text-muted">Your week</h2>
         <WeekGrid blocks={previewBlocks} />
       </div>
     </div>
   );
 }
 
-function Step2({
+function QuizStep({
   draft,
   setDraft,
+  onDone,
 }: {
   draft: Draft;
   setDraft: React.Dispatch<React.SetStateAction<Draft>>;
+  onDone: () => void;
 }) {
+  const [qIdx, setQIdx] = useState(0);
+  const [justPicked, setJustPicked] = useState<string | number | null>(null);
+  const [brushDone, setBrushDone] = useState(false);
+
+  const q = QUIZ[qIdx];
+  const isLast = qIdx === QUIZ.length - 1;
+  const multiValue: FreeTime[] = draft.freeTimeInterests;
+
+  function pickSingle(val: string | number) {
+    if (justPicked !== null) return;
+    setJustPicked(val);
+    setDraft((d) => ({ ...d, [q.key]: val }) as Draft);
+    if (isLast) {
+      setBrushDone(true);
+      setTimeout(onDone, 900);
+    } else {
+      setTimeout(() => {
+        setJustPicked(null);
+        setQIdx((i) => i + 1);
+      }, 300);
+    }
+  }
+
+  function toggleMulti(val: FreeTime) {
+    setDraft((d) => {
+      const cur = d.freeTimeInterests;
+      const next = cur.includes(val) ? cur.filter((x) => x !== val) : [...cur, val];
+      return { ...d, freeTimeInterests: next };
+    });
+  }
+
+  function advance() {
+    if (isLast) {
+      setBrushDone(true);
+      setTimeout(onDone, 900);
+    } else {
+      setQIdx((i) => i + 1);
+    }
+  }
+
   return (
-    <div className="card p-6 space-y-6 max-w-2xl">
-      <h2 className="text-lg font-medium text-anu-navy">A few quick questions</h2>
+    <div className="relative max-w-lg">
+      {/* Progress fraction */}
+      <p className="text-xs text-muted text-right mb-6 font-mono">
+        {qIdx + 1} / {QUIZ.length}
+      </p>
 
-      <Question label="What year are you in?">
-        <ChoiceRow
-          options={[1, 2, 3, 4]}
-          value={draft.year}
-          onSelect={(v) => setDraft((d) => ({ ...d, year: v as Year }))}
-          render={(v) => `Year ${v}`}
-        />
-      </Question>
+      {/* Question */}
+      <p className="font-serif text-[1.75rem] leading-snug text-anu-navy mb-8">{q.q}</p>
 
-      <Question label="How old are you?">
-        <ChoiceRow
-          options={["18-19", "20-22", "23+"] as AgeRange[]}
-          value={draft.ageRange}
-          onSelect={(v) => setDraft((d) => ({ ...d, ageRange: v as AgeRange }))}
-          render={(v) => v}
-        />
-      </Question>
+      {/* Choices */}
+      <div className="flex flex-col gap-3">
+        {q.multiSelect
+          ? q.opts.map((opt) => {
+              const active = multiValue.includes(opt.value as FreeTime);
+              return (
+                <button
+                  key={String(opt.value)}
+                  onClick={() => toggleMulti(opt.value as FreeTime)}
+                  className={cx(
+                    "w-full py-4 px-5 rounded-3xl border text-left text-base transition-all",
+                    active
+                      ? "bg-terra border-terra text-white"
+                      : "bg-anu-cream border-[#E0D8CC] text-anu-navy hover:border-terra hover:text-terra"
+                  )}
+                >
+                  {opt.label}
+                </button>
+              );
+            })
+          : q.opts.map((opt) => (
+              <button
+                key={String(opt.value)}
+                onClick={() => pickSingle(opt.value)}
+                className={cx(
+                  "w-full py-4 px-5 rounded-3xl border text-left text-base transition-all",
+                  justPicked === opt.value
+                    ? "bg-terra border-terra text-white"
+                    : "bg-anu-cream border-[#E0D8CC] text-anu-navy hover:border-terra hover:text-terra"
+                )}
+              >
+                {opt.label}
+              </button>
+            ))}
+      </div>
 
-      <Question label="Gender">
-        <ChoiceRow
-          options={["female", "male", "non-binary", "prefer not to say"]}
-          value={draft.gender}
-          onSelect={(v) => setDraft((d) => ({ ...d, gender: v as string }))}
-          render={(v) => v}
-        />
-      </Question>
+      {/* Next button for multi-select */}
+      {q.multiSelect && (
+        <button
+          onClick={advance}
+          className="mt-6 w-full py-3.5 rounded-full bg-terra text-white font-medium hover:opacity-90 transition"
+        >
+          {isLast ? "All done →" : "Next →"}
+        </button>
+      )}
 
-      <Question label="What do you do in your free time? (pick any that apply)">
-        <ChoiceRow
-          multiSelect
-          options={FREE_TIME_OPTIONS as readonly FreeTime[]}
-          value={draft.freeTimeInterests}
-          onSelect={(v) => {
-            const arr = draft.freeTimeInterests.includes(v as FreeTime)
-              ? draft.freeTimeInterests.filter((x) => x !== v)
-              : [...draft.freeTimeInterests, v as FreeTime];
-            setDraft((d) => ({ ...d, freeTimeInterests: arr }));
-          }}
-          render={(v) => v}
-        />
-      </Question>
-
-      <Question label="How do you prefer to study?">
-        <ChoiceRow
-          options={["alone", "small", "large", "no-preference"] as StudyStyle[]}
-          value={draft.studyStyle}
-          onSelect={(v) => setDraft((d) => ({ ...d, studyStyle: v as StudyStyle }))}
-          render={(v) =>
-            v === "small" ? "small group" : v === "large" ? "large group" : v === "no-preference" ? "no preference" : v
-          }
-        />
-      </Question>
+      {/* Brushstroke animation on completion */}
+      <div
+        className="absolute -bottom-6 left-0 right-0 h-[3px] rounded-full"
+        style={{
+          background: "linear-gradient(90deg, #C4714A, #7A9E8A)",
+          transform: brushDone ? "scaleX(1)" : "scaleX(0)",
+          transformOrigin: "left",
+          transition: "transform 0.8s ease-out",
+        }}
+      />
     </div>
   );
 }
@@ -308,53 +432,9 @@ function Field({
 }) {
   return (
     <label className="block">
-      <div className="text-xs font-medium text-anu-navy/80 mb-1">{label}</div>
+      <div className="text-[10px] uppercase tracking-wider text-muted mb-1.5">{label}</div>
       {children}
-      {hint && <div className="text-[10px] text-anu-navy/50 mt-1">{hint}</div>}
+      {hint && <div className="text-[10px] text-muted/70 mt-1">{hint}</div>}
     </label>
-  );
-}
-
-function Question({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <div className="text-sm font-medium text-anu-navy mb-2">{label}</div>
-      {children}
-    </div>
-  );
-}
-
-function ChoiceRow<T extends string | number>({
-  options,
-  value,
-  onSelect,
-  render,
-  multiSelect,
-}: {
-  options: readonly T[];
-  value: T | T[] | null;
-  onSelect: (v: T) => void;
-  render: (v: T) => string;
-  multiSelect?: boolean;
-}) {
-  const isSelected = (v: T) =>
-    multiSelect ? Array.isArray(value) && value.includes(v) : value === v;
-  return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((opt) => (
-        <button
-          key={String(opt)}
-          onClick={() => onSelect(opt)}
-          className={cx(
-            "px-3 py-1.5 rounded-full text-sm border transition",
-            isSelected(opt)
-              ? "bg-anu-navy text-white border-anu-navy"
-              : "bg-white text-anu-navy border-anu-navy/20 hover:border-anu-navy/40"
-          )}
-        >
-          {render(opt)}
-        </button>
-      ))}
-    </div>
   );
 }

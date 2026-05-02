@@ -19,6 +19,10 @@ function quizSimilarity(a: User, b: User): number {
   if (a.year === b.year) score += SCORE_QUIZ_MATCH;
   if (a.ageRange === b.ageRange) score += SCORE_QUIZ_MATCH;
   if (a.studyStyle === b.studyStyle) score += SCORE_QUIZ_MATCH;
+  if (a.productiveTime && b.productiveTime && a.productiveTime === b.productiveTime)
+    score += SCORE_QUIZ_MATCH;
+  if (a.partnerPriority && b.partnerPriority && a.partnerPriority === b.partnerPriority)
+    score += SCORE_QUIZ_MATCH;
   const interestOverlap = a.freeTimeInterests.filter((i) =>
     b.freeTimeInterests.includes(i)
   ).length;

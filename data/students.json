@@ -6,11 +6,10 @@
     "year": 2,
     "ageRange": "18-19",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "socialising",
-      "gym"
-    ],
-    "studyStyle": "alone"
+    "freeTimeInterests": ["socialising", "gym"],
+    "studyStyle": "alone",
+    "productiveTime": "night",
+    "partnerPriority": "personality"
   },
   {
     "id": "u3260257",
@@ -19,10 +18,10 @@
     "year": 1,
     "ageRange": "18-19",
     "gender": "female",
-    "freeTimeInterests": [
-      "gym"
-    ],
-    "studyStyle": "alone"
+    "freeTimeInterests": ["gym"],
+    "studyStyle": "alone",
+    "productiveTime": "morning",
+    "partnerPriority": "courses"
   },
   {
     "id": "u3961413",
@@ -31,12 +30,10 @@
     "year": 2,
     "ageRange": "20-22",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "sport",
-      "gaming",
-      "art"
-    ],
-    "studyStyle": "no-preference"
+    "freeTimeInterests": ["sport", "gaming", "art"],
+    "studyStyle": "no-preference",
+    "productiveTime": "flexible",
+    "partnerPriority": "everything"
   },
   {
     "id": "u3021945",
@@ -45,11 +42,10 @@
     "year": 1,
     "ageRange": "23+",
     "gender": "male",
-    "freeTimeInterests": [
-      "gym",
-      "art"
-    ],
-    "studyStyle": "large"
+    "freeTimeInterests": ["gym", "art"],
+    "studyStyle": "large",
+    "productiveTime": "afternoon",
+    "partnerPriority": "goals"
   },
   {
     "id": "u5490764",
@@ -58,12 +54,10 @@
     "year": 2,
     "ageRange": "20-22",
     "gender": "male",
-    "freeTimeInterests": [
-      "socialising",
-      "gaming",
-      "gym"
-    ],
-    "studyStyle": "large"
+    "freeTimeInterests": ["socialising", "gaming", "gym"],
+    "studyStyle": "large",
+    "productiveTime": "afternoon",
+    "partnerPriority": "personality"
   },
   {
     "id": "u9278439",
@@ -72,10 +66,10 @@
     "year": 2,
     "ageRange": "18-19",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "gym"
-    ],
-    "studyStyle": "small"
+    "freeTimeInterests": ["gym"],
+    "studyStyle": "small",
+    "productiveTime": "afternoon",
+    "partnerPriority": "goals"
   },
   {
     "id": "u3371766",
@@ -84,11 +78,10 @@
     "year": 2,
     "ageRange": "23+",
     "gender": "female",
-    "freeTimeInterests": [
-      "music",
-      "socialising"
-    ],
-    "studyStyle": "alone"
+    "freeTimeInterests": ["music", "socialising"],
+    "studyStyle": "alone",
+    "productiveTime": "night",
+    "partnerPriority": "personality"
   },
   {
     "id": "u1909564",
@@ -97,12 +90,10 @@
     "year": 1,
     "ageRange": "18-19",
     "gender": "female",
-    "freeTimeInterests": [
-      "music",
-      "art",
-      "gym"
-    ],
-    "studyStyle": "no-preference"
+    "freeTimeInterests": ["music", "art", "gym"],
+    "studyStyle": "no-preference",
+    "productiveTime": "flexible",
+    "partnerPriority": "everything"
   },
   {
     "id": "u2553065",
@@ -111,10 +102,10 @@
     "year": 1,
     "ageRange": "18-19",
     "gender": "non-binary",
-    "freeTimeInterests": [
-      "gym"
-    ],
-    "studyStyle": "no-preference"
+    "freeTimeInterests": ["gym"],
+    "studyStyle": "no-preference",
+    "productiveTime": "morning",
+    "partnerPriority": "courses"
   },
   {
     "id": "u5316385",
@@ -123,11 +114,10 @@
     "year": 1,
     "ageRange": "20-22",
     "gender": "male",
-    "freeTimeInterests": [
-      "sport",
-      "socialising"
-    ],
-    "studyStyle": "no-preference"
+    "freeTimeInterests": ["sport", "socialising"],
+    "studyStyle": "no-preference",
+    "productiveTime": "afternoon",
+    "partnerPriority": "goals"
   },
   {
     "id": "u5599538",
@@ -136,10 +126,10 @@
     "year": 3,
     "ageRange": "20-22",
     "gender": "female",
-    "freeTimeInterests": [
-      "sport"
-    ],
-    "studyStyle": "large"
+    "freeTimeInterests": ["sport"],
+    "studyStyle": "large",
+    "productiveTime": "afternoon",
+    "partnerPriority": "goals"
   },
   {
     "id": "u4508371",
@@ -148,12 +138,10 @@
     "year": 1,
     "ageRange": "20-22",
     "gender": "male",
-    "freeTimeInterests": [
-      "art",
-      "socialising",
-      "gaming"
-    ],
-    "studyStyle": "alone"
+    "freeTimeInterests": ["art", "socialising", "gaming"],
+    "studyStyle": "alone",
+    "productiveTime": "night",
+    "partnerPriority": "personality"
   },
   {
     "id": "u8626523",
@@ -162,11 +150,10 @@
     "year": 1,
     "ageRange": "18-19",
     "gender": "female",
-    "freeTimeInterests": [
-      "art",
-      "music"
-    ],
-    "studyStyle": "no-preference"
+    "freeTimeInterests": ["art", "music"],
+    "studyStyle": "no-preference",
+    "productiveTime": "morning",
+    "partnerPriority": "goals"
   },
   {
     "id": "u5953310",
@@ -175,12 +162,10 @@
     "year": 1,
     "ageRange": "18-19",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "art",
-      "sport",
-      "socialising"
-    ],
-    "studyStyle": "small"
+    "freeTimeInterests": ["art", "sport", "socialising"],
+    "studyStyle": "small",
+    "productiveTime": "afternoon",
+    "partnerPriority": "personality"
   },
   {
     "id": "u8667024",
@@ -189,12 +174,10 @@
     "year": 2,
     "ageRange": "18-19",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "art",
-      "socialising",
-      "gym"
-    ],
-    "studyStyle": "alone"
+    "freeTimeInterests": ["art", "socialising", "gym"],
+    "studyStyle": "alone",
+    "productiveTime": "night",
+    "partnerPriority": "courses"
   },
   {
     "id": "u6468745",
@@ -203,12 +186,10 @@
     "year": 2,
     "ageRange": "20-22",
     "gender": "non-binary",
-    "freeTimeInterests": [
-      "socialising",
-      "gym",
-      "sport"
-    ],
-    "studyStyle": "small"
+    "freeTimeInterests": ["socialising", "gym", "sport"],
+    "studyStyle": "small",
+    "productiveTime": "afternoon",
+    "partnerPriority": "personality"
   },
   {
     "id": "u2048231",
@@ -217,11 +198,10 @@
     "year": 1,
     "ageRange": "18-19",
     "gender": "male",
-    "freeTimeInterests": [
-      "socialising",
-      "gym"
-    ],
-    "studyStyle": "large"
+    "freeTimeInterests": ["socialising", "gym"],
+    "studyStyle": "large",
+    "productiveTime": "afternoon",
+    "partnerPriority": "courses"
   },
   {
     "id": "u7787507",
@@ -230,12 +210,10 @@
     "year": 2,
     "ageRange": "23+",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "music",
-      "art",
-      "gaming"
-    ],
-    "studyStyle": "no-preference"
+    "freeTimeInterests": ["music", "art", "gaming"],
+    "studyStyle": "no-preference",
+    "productiveTime": "flexible",
+    "partnerPriority": "everything"
   },
   {
     "id": "u9566066",
@@ -244,11 +222,10 @@
     "year": 3,
     "ageRange": "18-19",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "sport",
-      "gym"
-    ],
-    "studyStyle": "alone"
+    "freeTimeInterests": ["sport", "gym"],
+    "studyStyle": "alone",
+    "productiveTime": "morning",
+    "partnerPriority": "courses"
   },
   {
     "id": "u4782281",
@@ -257,12 +234,10 @@
     "year": 3,
     "ageRange": "23+",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "gaming",
-      "art",
-      "music"
-    ],
-    "studyStyle": "small"
+    "freeTimeInterests": ["gaming", "art", "music"],
+    "studyStyle": "small",
+    "productiveTime": "night",
+    "partnerPriority": "personality"
   },
   {
     "id": "u9794888",
@@ -271,12 +246,10 @@
     "year": 3,
     "ageRange": "18-19",
     "gender": "female",
-    "freeTimeInterests": [
-      "music",
-      "socialising",
-      "sport"
-    ],
-    "studyStyle": "alone"
+    "freeTimeInterests": ["music", "socialising", "sport"],
+    "studyStyle": "alone",
+    "productiveTime": "morning",
+    "partnerPriority": "goals"
   },
   {
     "id": "u4048462",
@@ -285,11 +258,10 @@
     "year": 2,
     "ageRange": "20-22",
     "gender": "prefer not to say",
-    "freeTimeInterests": [
-      "gaming",
-      "socialising"
-    ],
-    "studyStyle": "no-preference"
+    "freeTimeInterests": ["gaming", "socialising"],
+    "studyStyle": "no-preference",
+    "productiveTime": "flexible",
+    "partnerPriority": "everything"
   },
   {
     "id": "u7332457",
@@ -298,11 +270,10 @@
     "year": 1,
     "ageRange": "20-22",
     "gender": "male",
-    "freeTimeInterests": [
-      "music",
-      "socialising"
-    ],
-    "studyStyle": "large"
+    "freeTimeInterests": ["music", "socialising"],
+    "studyStyle": "large",
+    "productiveTime": "afternoon",
+    "partnerPriority": "personality"
   },
   {
     "id": "u4434042",
@@ -311,10 +282,10 @@
     "year": 1,
     "ageRange": "18-19",
     "gender": "male",
-    "freeTimeInterests": [
-      "gym"
-    ],
-    "studyStyle": "alone"
+    "freeTimeInterests": ["gym"],
+    "studyStyle": "alone",
+    "productiveTime": "morning",
+    "partnerPriority": "courses"
   },
   {
     "id": "u8318987",
@@ -323,9 +294,9 @@
     "year": 2,
     "ageRange": "18-19",
     "gender": "non-binary",
-    "freeTimeInterests": [
-      "gym"
-    ],
-    "studyStyle": "no-preference"
+    "freeTimeInterests": ["gym"],
+    "studyStyle": "no-preference",
+    "productiveTime": "flexible",
+    "partnerPriority": "goals"
   }
 ]

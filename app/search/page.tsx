@@ -50,25 +50,22 @@ export default function SearchPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-2xl font-semibold text-anu-navy">Search</h1>
-      <div className="relative max-w-xl">
-        <SearchIcon
-          size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-anu-navy/50"
-        />
+      <h1 className="font-serif text-2xl text-anu-navy">Search</h1>
+      <div className="flex items-center gap-3 bg-anu-cream rounded-3xl px-4 py-2.5 border border-transparent focus-within:border-terra transition max-w-xl">
+        <SearchIcon size={16} className="text-muted flex-shrink-0" />
         <input
           autoFocus
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Name, student ID (u1234567), course code (COMP1100), or degree…"
-          className="w-full pl-9 pr-3 py-2.5 rounded-full border border-anu-navy/20 bg-white text-sm focus:outline-anu-navy"
+          placeholder="Name, student ID, course code, or degree…"
+          className="flex-1 bg-transparent text-sm text-anu-navy placeholder-muted focus:outline-none"
         />
       </div>
 
       {q.trim() === "" ? (
-        <p className="text-sm text-anu-navy/50">Type to search.</p>
+        <p className="text-sm text-muted">Type to search.</p>
       ) : results.length === 0 ? (
-        <p className="text-sm text-anu-navy/50">No matches for &quot;{q}&quot;.</p>
+        <p className="text-sm text-muted">No matches for &quot;{q}&quot;.</p>
       ) : (
         <ul className="space-y-2">
           {results.map((s) => {
@@ -77,28 +74,28 @@ export default function SearchPage() {
               <li key={s.id}>
                 <Link
                   href={`/student/${s.id}`}
-                  className="card p-3 flex items-center justify-between gap-3 hover:border-anu-navy/30 transition"
+                  className="card p-3.5 flex items-center justify-between gap-3 hover:border-terra/40 transition"
                 >
                   <div>
                     <div className="text-anu-navy font-medium">
                       {s.name}{" "}
-                      <span className="text-xs font-mono text-anu-navy/40 ml-1">{s.id}</span>
+                      <span className="text-xs font-mono text-muted ml-1">{s.id}</span>
                     </div>
-                    <div className="text-xs text-anu-navy/60">
+                    <div className="text-xs text-muted mt-0.5">
                       {s.degree} · Year {s.year}
                     </div>
-                    <div className="text-[11px] text-anu-navy/60 mt-0.5 flex flex-wrap gap-1">
+                    <div className="text-[11px] text-muted mt-1 flex flex-wrap gap-1">
                       {courses.map((c) => (
                         <span
                           key={c}
-                          className="font-mono bg-anu-cream px-1.5 py-0.5 rounded"
+                          className="font-mono bg-anu-cream px-2 py-0.5 rounded-full border border-[#E0D8CC]"
                         >
                           {c}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <span className="text-xs text-anu-gold font-medium">View →</span>
+                  <span className="text-xs text-terra font-medium flex-shrink-0">View →</span>
                 </Link>
               </li>
             );

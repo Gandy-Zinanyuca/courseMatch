@@ -55,10 +55,10 @@ export default function DiscoverPage() {
     <div className="space-y-5">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-semibold text-anu-navy">
+          <h1 className="font-serif text-2xl text-anu-navy">
             Hey {me.name.split(" ")[0]} — here's who's around you
           </h1>
-          <p className="text-sm text-anu-navy/60">
+          <p className="text-sm text-muted mt-1">
             Ranked by who shares your sessions, then who you could swap into.
           </p>
         </div>
@@ -106,23 +106,24 @@ function FilterPills({
   const sameCount = matches.filter((m) => m.shared.some((s) => s.status === "same")).length;
   const swapCount = matches.filter((m) => m.shared.some((s) => s.status === "swappable")).length;
   const items: { id: Filter; label: string; count: number }[] = [
-    { id: "all", label: "All matches", count: matches.length },
-    { id: "same", label: "In your sessions", count: sameCount },
+    { id: "all", label: "All", count: matches.length },
+    { id: "same", label: "Same session", count: sameCount },
     { id: "swap", label: "Swappable", count: swapCount },
   ];
   return (
-    <div className="flex items-center gap-1 bg-white rounded-full border border-anu-navy/15 p-1">
+    <div className="flex items-center gap-2">
       {items.map((it) => (
         <button
           key={it.id}
           onClick={() => setFilter(it.id)}
           className={cx(
-            "px-3 py-1 text-xs rounded-full transition",
-            filter === it.id ? "bg-anu-navy text-white" : "text-anu-navy/70 hover:bg-anu-cream"
+            "px-3.5 py-1.5 text-xs rounded-full border transition",
+            filter === it.id
+              ? "bg-anu-navy text-white border-anu-navy"
+              : "bg-white text-anu-navy border-[#E0D8CC] hover:border-terra hover:text-terra"
           )}
         >
-          {it.label}{" "}
-          <span className="opacity-70 ml-0.5">{it.count}</span>
+          {it.label} <span className="opacity-60 ml-0.5">{it.count}</span>
         </button>
       ))}
     </div>
@@ -131,7 +132,7 @@ function FilterPills({
 
 function EmptyState() {
   return (
-    <div className="card p-10 text-center text-anu-navy/60">
+    <div className="card p-10 text-center text-muted">
       <p>No matches yet — make sure you've added your courses and picked sessions.</p>
     </div>
   );

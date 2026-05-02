@@ -69,23 +69,23 @@ export function CourseSessionPicker({
   return (
     <div className="space-y-3">
       <div className="relative">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-anu-navy/40" />
+        <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search by code (COMP1100) or name (programming…)"
-          className="w-full pl-9 pr-3 py-2 rounded-md border border-anu-navy/20 bg-white text-sm focus:outline-anu-navy"
+          placeholder="Search by code (COMP1100) or name…"
+          className="w-full pl-10 pr-4 py-2.5 rounded-3xl border border-[#E0D8CC] bg-anu-cream text-sm focus:outline-none focus:border-terra transition"
         />
         {candidates.length > 0 && (
-          <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-md border border-anu-navy/20 shadow-md z-10 max-h-60 overflow-y-auto">
+          <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl border border-[#E0D8CC] shadow-md z-10 max-h-60 overflow-y-auto">
             {candidates.map((c) => (
               <button
                 key={c.code}
                 onClick={() => addCourse(c.code)}
-                className="w-full text-left px-3 py-2 hover:bg-anu-cream text-sm border-b border-anu-navy/5 last:border-0"
+                className="w-full text-left px-4 py-2.5 hover:bg-anu-cream text-sm border-b border-[#E0D8CC] last:border-0 transition"
               >
                 <span className="font-mono text-anu-navy">{c.code}</span>{" "}
-                <span className="text-anu-navy/70">{c.name}</span>
+                <span className="text-muted">{c.name}</span>
               </button>
             ))}
           </div>
@@ -129,15 +129,17 @@ function CourseRow({
   onRemove: () => void;
 }) {
   return (
-    <div className="border border-anu-navy/15 rounded-md p-3 bg-anu-cream/40">
-      <div className="flex items-center justify-between mb-2">
-        <div>
-          <span className="font-mono text-sm font-semibold text-anu-navy">{code}</span>
-          <span className="text-xs text-anu-navy/60 ml-2">{courseName}</span>
+    <div className="border border-[#E0D8CC] rounded-xl p-3 bg-anu-cream/40">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sage/15 border border-sage/40 text-sage font-mono">
+            {code}
+          </span>
+          <span className="text-xs text-muted">{courseName}</span>
         </div>
         <button
           onClick={onRemove}
-          className="text-anu-navy/40 hover:text-red-600"
+          className="text-muted hover:text-terra transition"
           title="Remove course"
         >
           <Trash2 size={14} />
@@ -148,7 +150,7 @@ function CourseRow({
           const options = sessions.filter((s) => s.courseId === code && s.type === type);
           if (options.length === 0) {
             return (
-              <div key={type} className="text-[10px] text-anu-navy/30 italic">
+              <div key={type} className="text-[10px] text-muted/50 italic">
                 no {type}
               </div>
             );
@@ -159,13 +161,13 @@ function CourseRow({
           });
           return (
             <label key={type} className="text-xs">
-              <div className="text-[10px] uppercase text-anu-navy/60 mb-0.5">
+              <div className="text-[10px] uppercase tracking-wide text-muted mb-1">
                 {sessionTypeLabel[type]}
               </div>
               <select
                 value={current ?? ""}
                 onChange={(e) => onSetType(code, type, e.target.value || null)}
-                className="w-full px-2 py-1 rounded border border-anu-navy/20 bg-white text-xs focus:outline-anu-navy"
+                className="w-full px-2 py-1.5 rounded-lg border border-[#E0D8CC] bg-white text-xs focus:outline-none focus:border-terra transition"
               >
                 <option value="">— pick —</option>
                 {options.map((o) => (

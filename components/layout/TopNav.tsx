@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, Search, User2, GraduationCap } from "lucide-react";
+import { Compass, Search, User2 } from "lucide-react";
 import { useStore } from "@/lib/store";
 
 const items = [
@@ -17,12 +17,10 @@ export function TopNav() {
   const onboarding = pathname?.startsWith("/onboarding");
 
   return (
-    <header className="bg-anu-navy text-white">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <GraduationCap className="text-anu-goldLight" size={22} />
-          <span className="text-lg">courseMatch</span>
-          <span className="text-xs text-anu-goldLight/80 font-normal hidden sm:inline">· ANU</span>
+    <header className="bg-white border-b border-[#E0D8CC]">
+      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        <Link href="/" className="font-serif text-xl text-anu-navy tracking-tight">
+          courseMatch
         </Link>
         {currentUserId && !onboarding && (
           <nav className="flex items-center gap-1">
@@ -34,11 +32,11 @@ export function TopNav() {
                   href={href}
                   className={`px-3 py-1.5 rounded-full text-sm flex items-center gap-1.5 transition ${
                     active
-                      ? "bg-anu-goldLight text-anu-navy"
-                      : "text-white/80 hover:text-white hover:bg-white/10"
+                      ? "bg-terra text-white"
+                      : "text-anu-navy/60 hover:text-anu-navy hover:bg-anu-navy/5"
                   }`}
                 >
-                  <Icon size={15} />
+                  <Icon size={14} />
                   {label}
                 </Link>
               );

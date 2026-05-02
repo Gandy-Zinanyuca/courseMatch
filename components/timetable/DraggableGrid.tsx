@@ -107,11 +107,11 @@ export function DraggableGrid({
       <div className="card overflow-hidden">
         <div className="grid grid-cols-[60px_repeat(5,minmax(0,1fr))] text-xs">
           {/* Header */}
-          <div className="border-b border-anu-navy/10 bg-anu-cream" />
+          <div className="border-b border-[#E0D8CC] bg-anu-cream/60" />
           {DAYS.map((d) => (
             <div
               key={d}
-              className="text-center font-medium py-2 border-b border-l border-anu-navy/10 bg-anu-cream"
+              className="text-center font-medium py-2 border-b border-l border-[#E0D8CC] bg-anu-cream/60"
             >
               {d}
             </div>
@@ -119,13 +119,13 @@ export function DraggableGrid({
 
           {/* Time column */}
           <div
-            className="relative border-r border-anu-navy/10"
+            className="relative border-r border-[#E0D8CC]"
             style={{ height: TOTAL_ROWS * ROW_PX }}
           >
             {Array.from({ length: TOTAL_ROWS / 2 }).map((_, hour) => (
               <div
                 key={hour}
-                className="absolute left-0 right-0 text-anu-navy/50 px-1"
+                className="absolute left-0 right-0 text-muted px-1"
                 style={{ top: hour * 2 * ROW_PX, height: 2 * ROW_PX }}
               >
                 <span className="text-[10px]">{String(8 + hour).padStart(2, "0")}:00</span>
@@ -151,7 +151,7 @@ export function DraggableGrid({
 
       <DragOverlay dropAnimation={null}>
         {draggedSession && (
-          <div className="bg-anu-navy text-white rounded-md px-2 py-1 text-[11px] shadow-2xl border border-anu-gold opacity-90">
+          <div className="bg-terra text-white rounded-md px-2 py-1 text-[11px] shadow-2xl border border-terraLight opacity-90">
             <div className="font-semibold">
               {draggedSession.courseId} {sessionTypeLabel[draggedSession.type]}
             </div>
@@ -184,7 +184,7 @@ function DayColumn({
 }) {
   return (
     <div
-      className="relative border-l border-anu-navy/10"
+      className="relative border-l border-[#E0D8CC]"
       style={{ height: TOTAL_ROWS * ROW_PX }}
     >
       {Array.from({ length: TOTAL_ROWS }).map((_, i) => (
@@ -192,7 +192,7 @@ function DayColumn({
           key={i}
           className={cx(
             "absolute left-0 right-0 border-t",
-            i % 2 === 0 ? "border-anu-navy/10" : "border-anu-navy/5"
+            i % 2 === 0 ? "border-[#E0D8CC]" : "border-[#E0D8CC]/50"
           )}
           style={{ top: i * ROW_PX, height: ROW_PX }}
         />
@@ -234,7 +234,7 @@ function DraggableBlock({ session }: { session: Session }) {
       type="button"
       className={cx(
         "absolute left-1 right-1 rounded-md px-2 py-1 text-[11px] leading-tight text-left overflow-hidden z-20",
-        "bg-anu-navy text-white border border-anu-navy/40 cursor-grab active:cursor-grabbing select-none",
+        "bg-terra text-white border border-terra/40 cursor-grab active:cursor-grabbing select-none",
         isDragging && "opacity-30"
       )}
       style={{ top, height: Math.max(height - 2, 16) }}
